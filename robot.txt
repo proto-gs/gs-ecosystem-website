@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /index.html
+Allow: /news.html
+Allow: /privacy
+Sitemap: https://gs-ht.ru

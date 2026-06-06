@@ -1,0 +1,1069 @@
+
+<!DOCTYPE html>
+<html lang="ru" id="html-tag" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">GS | Мои проекты</title>
+    <!-- Мета-описание для поисковых систем (SEO) -->
+    <meta name="description" content="Портфолио разработчика G. Smerdov. Проекты GS.HTTP и GS.HTTP Lite для анализа HTTP-трафика и API.">
+    <!-- Подключение иконки сайта (Favicon) -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <style>
+        :root { --bg: #050505; --card: #111; --acc: #2979FF; --txt: #fff; --brd: #1A1A1A; --heart: #FF1744; }
+        .light { --bg: #f5f7fa; --card: #fff; --txt: #1a1a1a; --brd: #e1e4e8; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--txt); margin: 0; transition: 0.3s; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .btn, .card, .c-btn { border-radius: 12px; border: 1px solid var(--brd); transition: 0.2s; }
+        .btn:active { transform: scale(0.96); }
+        .controls { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
+        .c-btn { width: 40px; height: 40px; background: var(--card); color: var(--txt); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        header { text-align: center; margin-bottom: 60px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: var(--card); padding: 20px; text-decoration: none; color: inherit; }
+        .card:hover { border-color: var(--acc); }
+        .badge { font-size: 10px; font-weight: 700; padding: 4px 8px; background: var(--brd); border-radius: 6px; text-transform: uppercase; }
+        .more-btn { display: inline-block; margin-top: 20px; color: var(--acc); font-weight: 700; text-decoration: none; border: 1px solid var(--acc); padding: 10px 20px; border-radius: 10px; cursor: pointer; background: none; }
+        .more-btn:hover { background: var(--acc); color: #fff; }
+/* Возвращаем приветственное окно на самый верхний слой */
+/* Полностью непрозрачное приветственное окно поверх всего сайта */
+#welcome {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.7); /* Изменили сплошной цвет на прозрачный */
+    backdrop-filter: blur(8px); /* Добавили размытие заднего плана */
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: 0.5s;
+}
+
+/* Настройки прозрачности welcome-экрана для светлой темы */
+.light #welcome {
+    background: rgba(245, 247, 250, 0.7);
+}
+
+
+
+        
+/* ==========================================
+   ИСПРАВЛЕНИЕ ВЫРАВНИВАНИЯ И СПОЙЛЕРОВ
+   ========================================== */
+
+/* Карточка новости */
+.news-card {
+    cursor: pointer !important;
+}
+
+.news-item {
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important; /* Принудительно выравниваем текст по левому краю */
+}
+
+.news-item-title {
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+    margin-bottom: 4px !important;
+}
+
+/* Кнопка "Подробнее" */
+.more-details-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+    color: var(--acc) !important;
+    font-weight: 600 !important;
+    margin-top: 12px !important;
+    text-align: left !important;
+}
+
+.more-details-btn .arrow {
+    display: inline-block !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Поворот стрелочки при открытии */
+.news-card.active .more-details-btn .arrow {
+    transform: rotate(90deg) !important;
+}
+
+/* Скрываемый контейнер (Grid-сетка) */
+.news-content-scroll {
+    display: grid !important;
+    grid-template-rows: 0fr !important; /* Изначально скрыт */
+    overflow: hidden !important;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Раскрытие при добавлении класса active */
+.news-card.active .news-content-scroll {
+    grid-template-rows: 1fr !important;
+}
+
+.news-content-body {
+    min-height: 0 !important;
+    padding-top: 16px !important;
+    text-align: left !important; /* Выравнивание контента внутри */
+}
+
+.news-content-body h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: 10px !important;
+    text-align: left !important;
+}
+
+/* Красивые списки с дефисами */
+.news-content-body ul {
+    list-style: none !important; /* Полностью убираем дефолтные белые точки слева */
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+.news-content-body ul li {
+    position: relative !important;
+    padding-left: 20px !important; /* Отступ под кастомный дефис */
+    margin-bottom: 8px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    text-align: left !important;
+    list-style-type: none !important;
+}
+
+/* Автоматический дефис вместо точек */
+.news-content-body ul li::before {
+    content: "—" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    color: var(--acc) !important;
+    font-weight: bold !important;
+}
+
+
+
+        /* Стили для спойлеров и кнопок копирования */
+        summary.news-title { list-style: none; cursor: pointer; outline: none; padding-right: 20px; position: relative; }
+        summary.news-title::-webkit-details-marker { display: none; }
+        summary.news-title::after { content: '▸'; position: absolute; right: 0; top: 0; color: var(--acc); transition: transform 0.2s; }
+        details[open] summary.news-title::after { transform: rotate(90deg); }
+        .share-btn { background: none; border: none; cursor: pointer; font-size: 14px; opacity: 0.5; padding: 0; transition: 0.2s; margin-top: -3px; }
+        .share-btn:hover { opacity: 1; transform: scale(1.1); }
+
+        /* Стили для Toast-уведомлений */
+        #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
+        .toast { background: var(--card); color: var(--txt); border: 1px solid var(--brd); padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transform: translateY(20px); transition: 0.3s; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        /* Стили для контактов */
+        .contacts-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 20px; }
+        .contact-link { display: flex; align-items: center; gap: 8px; font-size: 14px; color: inherit; text-decoration: none; background: var(--card); border: 1px solid var(--brd); padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.2s; }
+        .contact-link:hover { border-color: var(--acc); background: rgba(41, 121, 255, 0.05); }
+        
+        /* Стилизация кнопки CloudTips с анимацией пульсации */
+        .contact-link.tips-btn:hover { border-color: var(--heart); background: rgba(255, 23, 68, 0.05); }
+        .contact-link.tips-btn:hover span { animation: pulse 0.8s infinite alternate; display: inline-block; }
+        @keyframes pulse { 
+            0% { transform: scale(1); } 
+            100% { transform: scale(1.3); } 
+        }
+
+        /* Стили кастомного скроллбара */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--brd); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--acc); }
+
+        /* Эффект плавного появления при скролле (Scroll Reveal) */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+/* ==========================================
+   ФИНАЛЬНЫЙ ФИКС ВЫРАВНИВАНИЯ И КЛИКОВ
+   ========================================== */
+
+/* Делаем всю карточку кликабельной */
+.news-card {
+    cursor: pointer !important;
+    text-align: left !important; /* Убираем центрирование текста */
+}
+
+.news-item {
+    text-align: left !important;
+}
+
+.news-item-title {
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+}
+
+/* Кнопка "Подробнее" со стрелочкой */
+.more-details-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 13px !important;
+    color: var(--acc) !important;
+    font-weight: 600 !important;
+    margin-top: 12px !important;
+    text-align: left !important;
+}
+
+.more-details-btn .arrow {
+    display: inline-block !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* Поворот стрелочки при открытии карточки */
+.news-card.active .more-details-btn .arrow {
+    transform: rotate(90deg) !important;
+}
+
+/* Скрытие контента через сетку Grid */
+.news-content-scroll {
+    display: grid !important;
+    grid-template-rows: 0fr !important; /* По умолчанию скрыто */
+    overflow: hidden !important;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Раскрытие сетки при клике (добавлении класса active) */
+.news-card.active .news-content-scroll {
+    grid-template-rows: 1fr !important;
+}
+
+.news-content-body {
+    min-height: 0 !important;
+    padding-top: 16px !important;
+    text-align: left !important;
+}
+
+.news-content-body h4 {
+    text-align: left !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 10px !important;
+}
+
+/* Полное удаление улетевших стандартных точек */
+.news-content-body ul {
+    list-style: none !important; 
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+}
+
+.news-content-body ul li {
+    position: relative !important;
+    padding-left: 20px !important; /* Отступ для красивого дефиса */
+    margin-bottom: 8px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    text-align: left !important;
+    list-style-type: none !important;
+}
+
+/* Новые автоматические маркеры-дефисы */
+.news-content-body ul li::before {
+    content: "—" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    color: var(--acc) !important;
+    font-weight: bold !important;
+}
+
+/* --- СТИЛИ АНИМАЦИИ ЛОГОТИПА --- */
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    margin: 0 auto 10px auto;
+}
+
+.main-letter {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--txt); /* Переменная цвета текста сайта */
+    text-transform: uppercase;
+    line-height: 1;
+    user-select: none;
+}
+
+.extra-text {
+    font-size: 3.8rem;
+    font-weight: 600;
+    color: var(--txt);
+    opacity: 0.7; /* Делаем выезжающий текст чуть мягче */
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    max-width: 0;
+}
+
+.text-g {
+    padding-left: 4px;
+    animation: expandTextG 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.text-s {
+    padding-left: 4px;
+    animation: expandTextS 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.divider {
+    width: 2px;
+    background-color: var(--brd); /* Граница в цвет текущей темы */
+    border-radius: 1px;
+    height: 0;
+    opacity: 0;
+    margin: 0;
+    animation: showDivider 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes showDivider {
+    0%, 15%, 85%, 100% { height: 0; opacity: 0; margin: 0; }
+    28%, 72% { height: 60px; opacity: 1; margin: 0 15px; }
+}
+
+@keyframes expandTextG {
+    0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -10px; }
+    28%, 72% { opacity: 1; max-width: 220px; letter-spacing: normal; }
+}
+
+@keyframes expandTextS {
+    0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -10px; }
+    28%, 72% { opacity: 1; max-width: 150px; letter-spacing: normal; }
+}
+
+/* Адаптивность для мобильных экранов */
+@media (max-width: 480px) {
+    .logo-container { height: 60px; }
+    .main-letter { font-size: 2.8rem; }
+    .extra-text { font-size: 2.1rem; }
+    @keyframes showDivider {
+        0%, 15%, 85%, 100% { height: 0; opacity: 0; margin: 0; }
+        28%, 72% { height: 35px; opacity: 1; margin: 0 8px; }
+    }
+    @keyframes expandTextG {
+        0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -5px; }
+        28%, 72% { opacity: 1; max-width: 120px; letter-spacing: normal; }
+    }
+    @keyframes expandTextS {
+        0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -5px; }
+        28%, 72% { opacity: 1; max-width: 80px; letter-spacing: normal; }
+    }
+}
+
+
+</style>
+</head>
+<body class="light" id="body-tag">
+
+
+
+<!-- Контейнер для всплывающих уведомлений -->
+<div id="toast-container"></div>
+
+<!-- Индикатор прогресса прокрутки -->
+<div id="scroll-progress" style="position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--acc); z-index: 1001; transition: width 0.1s ease-out;"></div>
+
+<div id="welcome">
+    <div class="logo-container" style="margin-bottom: 20px;">
+        <div class="main-letter">G</div>
+        <div class="extra-text text-g">S.HTTP</div>
+        <div class="divider"></div>
+        <div class="main-letter">S</div>
+        <div class="extra-text text-s">peed</div>
+    </div>
+    <button class="btn" style="padding: 10px 30px; background: var(--acc); color: #fff; border: none; cursor: pointer;" onclick="closeW()" data-key="w_b">Перейти</button>
+</div>
+
+
+<div class="controls">
+    <button class="c-btn" onclick="toggleL()">🌐</button>
+    <button class="c-btn" onclick="toggleT()" id="tBtn">☀️</button>
+</div>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <div class="logo-container">
+            <!-- Левая часть: G + S.HTTP -->
+            <div class="main-letter">G</div>
+            <div class="extra-text text-g">S.HTTP</div>
+            
+            <!-- Вертикальный разделитель -->
+            <div class="divider"></div>
+            
+            <!-- Правая часть: S + peed -->
+            <div class="main-letter">S</div>
+            <div class="extra-text text-s">peed</div>
+        </div>
+        <p style="opacity: 0.5; margin: 0;">by G. Smerdov</p>
+    </header>
+
+
+    <!-- Раздел с проектами -->
+    <section class="reveal">
+        <h2 data-key="p_h">Мои проекты</h2>
+        <div class="grid">
+            <div class="card">
+                <span class="badge">Android</span>
+                <h3>GS.HTTP</h3>
+                <p style="font-size: 14px; opacity: 0.7;" data-key="p_d1">Анализ HTTP-трафика и API.</p>
+                <a href="https://www.rustore.ru/catalog/app/com.flet.gshttp" target="_blank" style="font-size: 12px; color: var(--acc); text-decoration: none; font-weight: 700; margin-right: 10px;">RuStore →</a>
+                <a href="https://ruplay.market/apps/com.flet.gshttp" target="_blank" style="font-size: 12px; color: var(--acc); text-decoration: none; font-weight: 700;">RuMarket →</a>
+            </div>
+            <div class="card">
+                <span class="badge">Android</span>
+                <h3>GS.HTTP Lite</h3>
+                <p style="font-size: 14px; opacity: 0.7;" data-key="p_d2">Лёгкий анализ HTTP-трафика.</p>
+                <a href="https://www.rustore.ru/catalog/app/com.georgiy.smerdov.gshttp" target="_blank" style="font-size: 12px; color: var(--acc); text-decoration: none; font-weight: 700; margin-right: 10px;">RuStore →</a>
+                <a href="https://ruplay.market/apps/com.georgiy.smerdov.gshttp" target="_blank" style="font-size: 12px; color: var(--acc); text-decoration: none; font-weight: 700;">RuMarket →</a>
+            </div>
+            <div class="card" style="border-style: dashed; opacity: 0.6;">
+                <span class="badge">Windows</span>
+                <h3>GS.Monitor</h3>
+                <p style="font-size: 14px;" data-key="p_dev">В разработке...</p>
+            </div>
+            <div class="card" style="border-style: dashed; opacity: 0.6;">
+                <span class="badge">Android</span>
+                <span class="badge">Windows</span>
+                <h3>GS Calculator</h3>
+                <p style="font-size: 14px;" data-key="p_dev_1">Скоро</p>
+            </div>
+            <div class="card" style="border-style: dashed; opacity: 0.6;">
+                <span class="badge">Android</span>
+                <h3>GS Password</h3>
+                <p style="font-size: 14px;" data-key="p_dev_1">Скоро</p>
+            </div>
+        </div>
+    </section>
+
+<!-- Раздел с новостями -->
+<section style="margin-top: 50px; text-align: center;" class="reveal">
+    <h2 data-key="n_h">Новости</h2>
+    
+    <!-- ВМЕСТО СТАРОГО КОДА С DETAILS ВСТАВЬТЕ ТОЛЬКО ЭТОТ КОНТЕЙНЕР -->
+    <ul class="news-list" id="news-container"></ul>
+    
+    <a href="https://gs-ht-news.ru" class="more-btn" data-key="n_m" target="_blank">Смотреть все новости</a>
+</section>
+
+
+    <!-- Раздел Контакты и Поддержка -->
+    <section style="margin-top: 50px; text-align: center;" class="reveal">
+        <h2 data-key="c_h">Контакты и поддержка</h2>
+        <div class="contacts-grid">
+            <a href="https://t.me/GS_Ecosystem" target="_blank" class="contact-link">
+                <span>📢</span> <span data-key="c_tg">Telegram-канал</span>
+            </a>
+            <!-- Кнопка CloudTips для донатов с вашей персональной ссылкой -->
+            <a href="https://pay.cloudtips.ru/p/3e8ec825" target="_blank" class="contact-link tips-btn">
+                <span style="color: var(--heart);">❤️</span> <span data-key="c_tips">Поддержать проект</span>
+            </a>
+            <a href="privacy.html" target="_blank" class="contact-link">
+                <span>📄</span> <span data-key="p_d4">Политика конфиденциальности</span>
+            </a>
+	    <a href="https://gs-ht-question-answer.ru" target="_blank" class="contact-link">
+                <span></span> <span data-key="p_d5">Вопросы-ответы</span>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 G. Smerdov. All rights reserved.</p>
+        <p style="font-size: 10px;" data-key="f_law">Используя сайт, вы соглашаетесь на обработку персональных данных.</p>
+    </footer>
+</div>
+
+<!-- Кнопка «Наверх» -->
+<button id="to-top-btn" class="c-btn" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: 99; font-size: 18px;" onclick="scrollToTop()">↑</button>
+
+<script>
+    const dict = { 
+        ru: { 
+            title: "GS | Мои проекты",
+            w_b: "Перейти",
+            p_h: "Мои проекты", 
+            p_d1: "Анализ HTTP-трафика и API.",
+            p_d2: "Лёгкий анализ HTTP-трафика.",
+            p_d3: "Новости в ТГК",
+            p_d4: "Политика конфиденциальности",
+	    p_d5: "Вопросы-ответы",    
+            p_dev: "В разработке...",
+            p_dev_1: "Скоро",
+            n_h: "Новости", 
+            n_m: "Смотреть все новости",
+            c_h: "Контакты и поддержка",
+            f_law: "Используя сайт, вы соглашаетесь на обработку персональных данных.",
+            c_tg: "Telegram-канал",
+            c_tips: "Поддержать проект",
+            t_copy: "Ссылка скопирована!",
+            
+            n_t1: "Обновление GS.HTTP v1.0.3",
+            n_d1: `<h4>Что нового:</h4>
+                <ul>
+                    <li>— <strong>Версия:</strong> 1.0.3</li>
+                    <li>— <strong>Оптимизация веса:</strong> с 65 МБ до более 10 МБ.</li>
+                    <li>— Приложение полностью перенесено на движок <b>gson</b>.</li>
+                    <li>— Добавлен выбор HTTP-методов: GET, POST, HEAD, PUT.</li>
+                    <li>— Новый инструмент: живой поиск и фильтрация по Заголовкам, Куки и JSON-телу ответа.</li>
+                    <li>— Добавлена кнопка плавного переключения Тёмной/Светлой темы.</li>
+                    <li>— Появилась кнопка «Открыть в браузере» для успешных сканов.</li>
+                    <li>— В раздел инфо улучшена кнопка поддержки и кнопка сайта разработчика.</li>
+                    <li>— Обновлен дизайн иконки приложения (GS).</li>
+                </ul>`,
+            n_t2: "Обновление GS.HTTP.Lite v1.0.6",
+            n_d2: `<h4>Что нового:</h4>
+                <ul>
+                    <li>— <strong>Версия:</strong> 1.0.6</li>
+                    <li>— <strong>Оптимизация веса:</strong> с 65 МБ до более 10 МБ.</li>
+                    <li>— Улучшена гибкость движка <b>gson</b>.</li>
+                    <li>— Исправлены мелкие ошибки.</li>
+                    <li>— Добавлена рабочая кнопка сайта разработчика.</li>
+                    <li>— Приложение стало легче и быстрее!</li>
+                </ul>`
+        }, 
+        en: { 
+            title: "GS | My Projects",
+            w_b: "Enter",
+            p_h: "My Projects", 
+            p_d1: "HTTP traffic and API analysis.",
+            p_d2: "Lightweight HTTP traffic analysis.",
+            p_d3: "News in Telegram",
+            p_d4: "Privacy Policy",
+	    p_d5: "Question-answer",
+            p_dev: "In development...",
+            p_dev_1: "Coming Soon",
+            n_h: "News", 
+            n_m: "View all news",
+            c_h: "Contact & Support",
+            f_law: "By using this site, you agree to the processing of personal data.",
+            c_tg: "Telegram Channel",
+            c_tips: "Support Project",
+            t_copy: "Link copied!",
+            
+            n_t1: "GS.HTTP Update v1.0.3",
+            n_d1: `<h4>What's new:</h4>
+                <ul>
+                    <li>— <strong>Version:</strong> 1.0.3</li>
+                    <li>— <strong>Size optimization:</strong> from 65 MB to just over 100 MB.</li>
+                    <li>— The app is completely migrated to the <b>gson</b> engine.</li>
+                    <li>— Added selection of HTTP methods: GET, POST, HEAD, PUT.</li>
+                    <li>— New tool: live search and filtering by Headers, Cookies, and JSON response body.</li>
+                    <li>— Added a button for smooth Dark/Light theme switching.</li>
+                    <li>— Added an "Open in Browser" button for successful scans.</li>
+                    <li>— Improved support button and developer website button in the info section.</li>
+                    <li>— Updated app icon design (GS).</li>
+                </ul>`,
+            n_t2: "GS.HTTP.Lite Update v1.0.6",
+            n_d2: `<h4>What's new:</h4>
+                <ul>
+                    <li>— <strong>Version:</strong> 1.0.6</li>
+                    <li>— <strong>Size optimization:</strong> from 65 MB to just over 10 MB.</li>
+                    <li>— Improved flexibility of the <b>gson</b> engine.</li>
+                    <li>— Fixed minor bugs.</li>
+                    <li>— Added a working developer website button.</li>
+                    <li>— The app has become lighter and faster!</li>
+                </ul>`
+        } 
+    };
+
+    let lng = localStorage.getItem('lng') || 'ru';
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    if (isDark) {
+        document.getElementById('body-tag').classList.remove('light');
+        document.getElementById('tBtn').innerText = '🌙';
+    } else {
+        document.getElementById('body-tag').classList.add('light');
+        document.getElementById('tBtn').innerText = '☀️';
+    }
+
+    apply();
+
+    if (sessionStorage.getItem('welcome_seen')) {
+        document.getElementById('welcome').style.display = 'none';
+        initScrollReveal();
+    }
+
+    function toggleL() {
+        lng = lng === 'ru' ? 'en' : 'ru';
+        localStorage.setItem('lng', lng);
+        apply();
+    }
+
+    function toggleT() {
+        const body = document.getElementById('body-tag');
+        const tBtn = document.getElementById('tBtn');
+        
+        if (body.classList.contains('light')) {
+            body.classList.remove('light');
+            tBtn.innerText = '🌙';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.classList.add('light');
+            tBtn.innerText = '☀️';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    function closeW() {
+        const welcome = document.getElementById('welcome');
+        welcome.style.opacity = '0';
+        setTimeout(() => {
+            welcome.style.display = 'none';
+            initScrollReveal();
+        }, 500);
+        sessionStorage.setItem('welcome_seen', 'true');
+    }
+
+
+
+function apply() {
+    // 1. Установка языка и базовых текстов страницы
+    document.documentElement.setAttribute('lang', lng);
+    
+    const siteTitle = document.getElementById('site-title');
+    if (siteTitle && dict[lng] && dict[lng].title) {
+        siteTitle.innerText = dict[lng].title;
+    }
+
+    // 2. Автоматический перевод статичных элементов по data-key
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (!key || !dict[lng] || !dict[lng][key]) return;
+
+        // Если это текстовое содержимое новости, чистим ручные дефисы "<li>— "
+        if (key === 'n_d1' || key === 'n_d2') {
+            el.innerHTML = dict[lng][key].replace(/<li>\s*—\s*/g, '<li>');
+        } else {
+            // Для всех обычных кнопок и статичного текста
+            el.innerText = dict[lng][key];
+        }
+    });
+
+    // 3. Поиск контейнера новостей
+    const container = document.getElementById('news-container');
+    if (!container) return; // Защита: если контейнера нет на странице, скрипт не упадет
+
+    // Массив с ключами ваших новостей из словаря (dict)
+    const newsKeys = [
+        { titleKey: 'n_t1', descKey: 'n_d1', date: '21.05.2026', id: 'news-103' },
+        { titleKey: 'n_t2', descKey: 'n_d2', date: '16.05.2026', id: 'news-lite106' }
+    ];
+
+    const existingItems = container.querySelectorAll('.news-card');
+
+    // ==========================================================
+    // ВАРИАНТ А: КАРТОЧКИ УЖЕ НА СТРАНИЦЕ — ПРОСТО ОБНОВЛЯЕМ ТЕКСТ
+    // (Благодаря этому открытые блоки НЕ закрываются при смене языка)
+    // ==========================================================
+    if (existingItems.length === newsKeys.length) {
+        existingItems.forEach((li, index) => {
+            const keys = newsKeys[index];
+            let cleanContent = dict[lng][keys.descKey].replace(/<li>\s*—\s*/g, '<li>');
+            
+            li.querySelector('.news-item-title').innerText = dict[lng][keys.titleKey];
+            li.querySelector('.btn-text').innerText = dict[lng].s_more || (lng === 'ru' ? 'Подробнее...' : 'More details...');
+            li.querySelector('.news-content-body').innerHTML = cleanContent;
+        });
+        return; // Завершаем выполнение функции, чтобы не перерисовывать HTML
+    }
+
+    // ==========================================================
+    // ВАРИАНТ Б: ПЕРВИЧНОЕ СОЗДАНИЕ КАРТОЧЕК С НАВЕШИВАНИЕМ КЛИКОВ
+    // ==========================================================
+    container.innerHTML = ''; // Очищаем контейнер перед рендерингом
+
+    newsKeys.forEach(keys => {
+        const li = document.createElement('li');
+        li.className = 'card news-card';
+        li.id = keys.id;
+
+        // Вырезаем жесткие дефисы для правильного CSS-отображения
+        let cleanContent = dict[lng][keys.descKey].replace(/<li>\s*—\s*/g, '<li>');
+        const sMoreText = dict[lng].s_more || (lng === 'ru' ? 'Подробнее...' : 'More details...');
+
+        // Собираем правильную HTML-структуру карточки
+        li.innerHTML = `
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="news-date">${keys.date}</div>
+                    <button class="share-btn" onclick="copyNewsLink('${keys.id}')" title="Копировать ссылку">🔗</button>
+                </div>
+                <div class="news-item">
+                    <div class="news-item-title">${dict[lng][keys.titleKey]}</div>
+                    <div class="more-details-btn">
+                        <span class="btn-text">${sMoreText}</span>
+                        <span class="arrow">➔</span>
+                    </div>
+                    <div class="news-content-scroll">
+                        <div class="news-content-body">
+                            ${cleanContent}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // НАВЕШИВАЕМ КЛИКАБЕЛЬНОСТЬ НА СВЕЖЕЕОТРЕНДЕРЕННЫЙ БЛОК
+        li.onclick = function(e) {
+            // Если кликнули по кнопке скопировать ссылку или по ссылкам внутри новости — игнорируем
+            if (e.target.closest('.share-btn') || e.target.closest('a')) return;
+
+            const isActive = this.classList.contains('active');
+
+            // Автоматически сворачиваем все остальные новости
+            container.querySelectorAll('.news-card').forEach(otherCard => {
+                if (otherCard !== this) otherCard.classList.remove('active');
+            });
+
+            // Переключаем класс active у текущей карточки (все остальное плавно делает CSS Grid)
+            if (isActive) {
+                this.classList.remove('active');
+            } else {
+                this.classList.add('active');
+            }
+        };
+
+        container.appendChild(li);
+    });
+}
+
+
+
+
+    window.onscroll = function() {
+        manageScrollEffects();
+    };
+
+    function manageScrollEffects() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        
+        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+        document.getElementById("scroll-progress").style.width = scrolled + "%";
+
+        const topBtn = document.getElementById("to-top-btn");
+        if (winScroll > 300) {
+            topBtn.style.display = "flex";
+        } else {
+            topBtn.style.display = "none";
+        }
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Показ всплывающего Toast уведомления
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = message;
+        container.appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 50);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
+
+    function copyNewsLink(newsId) {
+        const baseUrl = window.location.href.split('#');
+        const fullUrl = baseUrl + '#' + newsId;
+
+        navigator.clipboard.writeText(fullUrl).then(() => {
+            const card = document.getElementById(newsId);
+            const btn = card.querySelector('.share-btn');
+            const originalIcon = btn.innerText;
+            
+            btn.innerText = '✔️';
+            btn.style.opacity = '1';
+            
+            showToast(dict[lng].t_copy);
+            
+            setTimeout(() => {
+                btn.innerText = originalIcon;
+                btn.style.opacity = '';
+            }, 1500);
+        }).catch(err => {
+            console.error('Ошибка копирования: ', err);
+        });
+    }
+
+    // Инициализация анимации появления блоков при прокрутке
+    function initScrollReveal() {
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(el => observer.observe(el));
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.getItem('welcome_seen')) {
+            initScrollReveal();
+        }
+
+        const hash = window.location.hash;
+        if (hash) {
+            const targetNews = document.querySelector(hash);
+            if (targetNews) {
+                const details = targetNews.querySelector('details');
+                if (details) {
+                    details.open = true;
+                    setTimeout(() => {
+                        targetNews.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 500);
+                }
+            }
+        }
+    });
+// ==========================================
+// 1. КОНФИГУРАЦИЯ ЦВЕТОВ ДЛЯ ДВУХ ТЕМ
+// ==========================================
+const canvasThemes = {
+    dark: {
+        particleColor: 'rgba(255, 255, 255, 0.85)',
+        lineColorRGB: '255, 255, 255',
+        lineAlphaModifier: 0.4,
+        mouseAlphaModifier: 0.75
+    },
+    light: {
+        particleColor: 'rgba(50, 50, 60, 0.75)', 
+        lineColorRGB: '50, 50, 60',              
+        lineAlphaModifier: 0.3,
+        mouseAlphaModifier: 0.5
+    }
+};
+
+let currentCanvasColors = canvasThemes.dark;
+
+function syncCanvasTheme() {
+    const body = document.getElementById('body-tag');
+    if (body && body.classList.contains('light')) {
+        currentCanvasColors = canvasThemes.light;
+    } else {
+        currentCanvasColors = canvasThemes.dark;
+    }
+}
+
+// ==========================================
+// 2. АВТОНОМНЫЙ СКРИПТ АНИМАЦИИ (ИСПРАВЛЕННЫЙ)
+// ==========================================
+(function() {
+    let canvas = document.getElementById('bgCanvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'bgCanvas';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100vw';
+        canvas.style.height = '100vh';
+        canvas.style.zIndex = '99999'; 
+        canvas.style.pointerEvents = 'none'; 
+        document.body.appendChild(canvas); 
+    }
+    
+    const ctx = canvas.getContext('2d');
+    
+    const config = {
+        particleCount: 110,      
+        maxDistance: 150,        
+        mouseDistance: 180,      
+        baseSpeed: 1.2           
+    };
+
+    let particles = [];
+    const mouse = { x: null, y: null };
+
+    function updateConfigForDevice() {
+        const width = window.innerWidth;
+        
+        if (width < 480) { 
+            config.particleCount = 35;
+            config.maxDistance = 90;
+            config.mouseDistance = 120;
+        } else if (width < 768) { 
+            config.particleCount = 55;
+            config.maxDistance = 110;
+            config.mouseDistance = 140;
+        } else if (width < 1200) { 
+            config.particleCount = 85;
+            config.maxDistance = 130;
+            config.mouseDistance = 160;
+        } else { 
+            config.particleCount = 110;
+            config.maxDistance = 150;
+            config.mouseDistance = 180;
+        }
+    }
+
+    function init() {
+        particles = [];
+        for (let i = 0; i < config.particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const oldCount = config.particleCount;
+        updateConfigForDevice();
+        if (oldCount !== config.particleCount || particles.length === 0) {
+            init(); 
+        }
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    window.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    // Исправлено: корректное считывание координат первого касания [0]
+    window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length > 0) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * config.baseSpeed;
+            this.vy = (Math.random() - 0.5) * config.baseSpeed;
+            this.radius = Math.random() * 1.2 + 1.2; 
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = currentCanvasColors.particleColor; 
+            ctx.fill();
+        }
+    }
+
+    function animate() {
+        syncCanvasTheme();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                let dx = particles[i].x - particles[j].x;
+                let dy = particles[i].y - particles[j].y;
+                let dist = Math.hypot(dx, dy);
+
+                if (dist < config.maxDistance) {
+                    let alpha = (1 - dist / config.maxDistance) * currentCanvasColors.lineAlphaModifier;
+                    
+                    if (mouse.x !== null && mouse.y !== null) {
+                        let mDist1 = Math.hypot(particles[i].x - mouse.x, particles[i].y - mouse.y);
+                        if (mDist1 < config.mouseDistance) alpha *= 1.5;
+                    }
+
+                    ctx.strokeStyle = `rgba(${currentCanvasColors.lineColorRGB}, ${alpha})`;
+                    ctx.lineWidth = 0.6; 
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+
+            if (mouse.x !== null && mouse.y !== null) {
+                let mDx = particles[i].x - mouse.x;
+                let mDy = particles[i].y - mouse.y;
+                let mDist = Math.hypot(mDx, mDy);
+
+                if (mDist < config.mouseDistance) {
+                    let mAlpha = (1 - mDist / config.mouseDistance) * currentCanvasColors.mouseAlphaModifier;
+                    ctx.strokeStyle = `rgba(${currentCanvasColors.lineColorRGB}, ${mAlpha})`;
+                    ctx.lineWidth = 0.8; 
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    // Принудительный вызов функций в правильном порядке
+    updateConfigForDevice();
+    resizeCanvas(); // Внутри вызовется init()
+    animate();
+})();
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
