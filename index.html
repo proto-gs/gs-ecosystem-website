@@ -1344,10 +1344,28 @@ prevBtn.addEventListener('click', () => {
     moveSlider();
 });
 
-// Выравниваем первый слайд по центру сразу после загрузки страницы
 window.addEventListener('load', () => {
-    setTimeout(moveSlider, 100);
-});	
+    // 1. Сначала просто настраиваем активные классы и текст
+    for (let i = 0; i < totalSlides; i++) {
+        document.getElementById('slide' + i).classList.remove('active');
+        document.getElementById('dot' + i).classList.remove('active');
+    }
+    document.getElementById('slide' + currentIdx).classList.add('active');
+    document.getElementById('dot' + currentIdx).classList.add('active');
+    descBlock.textContent = descriptions[currentIdx];
+
+    // 2. Находим внутренний контейнер прокрутки слайдера
+    const viewport = document.getElementById('viewport');
+    const activeSlide = document.getElementById('slide' + currentIdx);
+    
+    if (viewport && activeSlide) {
+        // Вычисляем точное положение первого слайда внутри контейнера
+        const offsetLeft = activeSlide.offsetLeft - (viewport.clientWidth / 2) + (activeSlide.clientWidth / 2);
+        // Прокручиваем ТОЛЬКО слайдер, не трогая скролл всей страницы
+        viewport.scrollLeft = offsetLeft;
+    }
+});
+
 
 
 
