@@ -8,8 +8,6 @@
 	<link rel="icon" href="photo_2026-06-10_00-22-33.jpg" type="image/jpeg">
     <!-- Мета-описание для поисковых систем (SEO) -->
     <meta name="description" content="Портфолио разработчика G. Smerdov. Проекты GS.HTTP и GS.HTTP Lite для анализа HTTP-трафика и API.">
-    <!-- Подключение иконки сайта (Favicon) -->
-    <link rel="icon" type="image/png" href="favicon.png">
     
     <style>
         :root { --bg: #050505; --card: #111; --acc: #2979FF; --txt: #fff; --brd: #1A1A1A; --heart: #FF1744; }
@@ -752,15 +750,11 @@ function apply() {
     // Массив с ключами ваших новостей из словаря (dict)
     const newsKeys = [
         { titleKey: 'n_t1', descKey: 'n_d1', date: '21.05.2026', id: 'news-103' },
-        { titleKey: 'n_t2', descKey: 'n_d2', date: '16.05.2026', id: 'news-lite106' }
+        { titleKey: 'n_t2', descKey: 'n_d2', date: '09.06.2026', id: 'news-lite106' }
     ];
 
     const existingItems = container.querySelectorAll('.news-card');
 
-    // ==========================================================
-    // ВАРИАНТ А: КАРТОЧКИ УЖЕ НА СТРАНИЦЕ — ПРОСТО ОБНОВЛЯЕМ ТЕКСТ
-    // (Благодаря этому открытые блоки НЕ закрываются при смене языка)
-    // ==========================================================
     if (existingItems.length === newsKeys.length) {
         existingItems.forEach((li, index) => {
             const keys = newsKeys[index];
