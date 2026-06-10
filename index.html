@@ -450,12 +450,18 @@
 .slider-description {
     text-align: center;
     margin-top: 20px;
-    font-size: 1em;
-    color: #e0e0e0;
+    font-size: 1.05em; /* Сделали шрифт чуть крупнее и выразительнее */
+    font-weight: 500;  /* Сделали текст немного плотнее */
+    
+    /* Самое важное изменение: */
+    color: inherit;    /* Текст автоматически станет чёрным на светлой теме и белым на тёмной */
+    
     min-height: 40px;
     padding: 0 20px;
     font-family: Arial, sans-serif;
+    opacity: 0.9;      /* Добавит мягкости внешнему виду */
 }
+
 
 /* Индикаторы */
 .dots-container {
