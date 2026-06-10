@@ -361,7 +361,120 @@
         28%, 72% { opacity: 1; max-width: 80px; letter-spacing: normal; }
     }
 }
+/* --- СТИЛИ РАЗДЕЛА: ДИЗАЙН ПРОЕКТОВ --- */
+.slider-window {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
 
+/* Окно просмотра: центрирует элементы и скрывает полосу прокрутки браузера */
+.slider-viewport {
+    width: 100%;
+    max-width: 800px; /* Ширина, чтобы было видно боковые телефоны */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    display: flex;
+    justify-content: flex-start;
+    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+}
+
+.slider-viewport::-webkit-scrollbar {
+    display: none; /* Скрываем скроллбар в Chrome/Safari */
+}
+
+/* Длинная лента со всеми смартфонами */
+.slider-track {
+    display: flex;
+    gap: 40px;
+    /* Добавляем отступы по бокам, чтобы первый и последний слайды могли встать ровно по центру */
+    padding: 0 calc(50% - 130px); 
+}
+
+/* Стиль смартфона */
+.phone-card {
+    width: 260px;
+    flex-shrink: 0;
+    transition: opacity 0.4s, transform 0.4s, filter 0.4s;
+    opacity: 0.3;
+    filter: blur(1.5px);
+    transform: scale(0.85);
+}
+
+/* Класс активного центрального экрана */
+.phone-card.active {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+}
+
+.phone-card img {
+    width: 100%;
+    display: block;
+    height: auto;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* Кнопки-стрелки */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    transition: background-color 0.2s;
+}
+
+.nav-btn:hover { background-color: #f9f9f9; }
+.nav-btn svg { width: 22px; height: 22px; fill: #4a4a4a; }
+.prev-btn { left: 20px; }
+.next-btn { right: 20px; }
+
+/* Описание под телефонами */
+.slider-description {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1em;
+    color: #e0e0e0;
+    min-height: 40px;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Индикаторы */
+.dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: #555555;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.dot.active { background-color: #ffffff; }
 
 </style>
 </head>
@@ -532,6 +645,50 @@
     
     <a href="https://gs-ht-news.ru" class="more-btn" data-key="n_m" target="_blank">Смотреть все новости</a>
 </section>
+
+<!-- Раздел: Дизайн проектов -->
+<section style="margin-top: 70px; text-align: center; padding: 20px 0;" class="reveal">
+    <h2 data-key="p_d_title">Дизайн проектов</h2>
+    
+    <div class="slider-window">
+        <!-- Левая стрелка -->
+        <button class="nav-btn prev-btn" id="prevBtn" aria-label="Назад" type="button">
+            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+        </button>
+
+        <!-- Окно просмотра -->
+        <div class="slider-viewport" id="viewport">
+            <div class="slider-track">
+                <div class="phone-card active" id="slide0"><img src="screenshot1.png" alt="Экран 1"></div>
+                <div class="phone-card" id="slide1"><img src="screenshot2.png" alt="Экран 2"></div>
+                <div class="phone-card" id="slide2"><img src="screenshot3.png" alt="Экран 3"></div>
+                <div class="phone-card" id="slide3"><img src="screenshot4.png" alt="Экран 4"></div>
+                <div class="phone-card" id="slide4"><img src="screenshot5.png" alt="Экран 5"></div>
+                <div class="phone-card" id="slide5"><img src="screenshot6.png" alt="Экран 6"></div>
+            </div>
+        </div>
+
+        <!-- Правая стрелка -->
+        <button class="nav-btn next-btn" id="nextBtn" aria-label="Вперед" type="button">
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41L10 6l6 6-6 6-1.41-1.41z"/></svg>
+        </button>
+    </div>
+
+    <!-- Интерактивное описание экрана -->
+    <div class="slider-description" id="sliderDesc">
+        Интерактивное представление нового дизайна приложения GS.HTTP.Lie
+    </div>
+
+    <!-- Точки пагинации -->
+    <div class="dots-container">
+        <div class="dot active" id="dot0"></div>
+        <div class="dot" id="dot1"></div>
+        <div class="dot" id="dot2"></div>
+        <div class="dot" id="dot3"></div>
+        <div class="dot" id="dot4"></div>
+        <div class="dot" id="dot5"></div>
+    </div>
+</section>	
 
 
     <!-- Раздел Контакты и Поддержка -->
@@ -1130,6 +1287,61 @@ function syncCanvasTheme() {
     resizeCanvas(); // Внутри вызовется init()
     animate();
 })();
+
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const descBlock = document.getElementById('sliderDesc');
+
+let currentIdx = 0; 
+const totalSlides = 6;
+
+const descriptions = [
+    "GS.HTTP.Lite: Новое минималистичное главное меню приложения.",
+    "GS.HTTP.Lite: Удобное новое выпадающее меню, в котором минималистично и аккуратно расположены все дополнительные функции приложения.",
+    "GS.HTTP.Lite: Теперь в приложении доступны настройки и оформлены в красивой выпадающей шторки",
+    "GS.HTTP.Lite: Новый дизайн сканера в приложении.",
+    "GS.HTTP.Lite: Обновлённый полномасштабный раздел настроек",
+    "GS.HTTP.Lite: Обновлённый раздел очистки истории"
+];
+
+function moveSlider() {
+    // 1. Сбрасываем и расставляем активные классы для правильного масштаба/прозрачности
+    for (let i = 0; i < totalSlides; i++) {
+        document.getElementById('slide' + i).classList.remove('active');
+        document.getElementById('dot' + i).classList.remove('active');
+    }
+
+    const activeSlide = document.getElementById('slide' + currentIdx);
+    activeSlide.classList.add('active');
+    document.getElementById('dot' + currentIdx).classList.add('active');
+    
+    // 2. Команда браузеру: найти активный слайд и отцентровать его строго посередине
+    activeSlide.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+    });
+
+    // 3. Обновляем текст описания
+    descBlock.textContent = descriptions[currentIdx];
+}
+
+nextBtn.addEventListener('click', () => {
+    currentIdx = currentIdx + 1;
+    if (currentIdx >= totalSlides) { currentIdx = 0; }
+    moveSlider();
+});
+
+prevBtn.addEventListener('click', () => {
+    currentIdx = currentIdx - 1;
+    if (currentIdx < 0) { currentIdx = totalSlides - 1; }
+    moveSlider();
+});
+
+// Выравниваем первый слайд по центру сразу после загрузки страницы
+window.addEventListener('load', () => {
+    setTimeout(moveSlider, 100);
+});	
 
 
 
