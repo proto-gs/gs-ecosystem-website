@@ -482,6 +482,43 @@
 
 .dot.active { background-color: #ffffff; }
 
+/* Обновлённые стили для идеальной видимости на тёмном фоне */
+.main-link-block {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: #111111; /* Тёмный фон кнопки */
+    border: 1px solid #333333; /* Сделали рамку контрастнее, чтобы её было видно */
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    width: fit-content;
+    margin-top: 15px;
+}
+
+/* Эффект при наведении */
+.main-link-block:hover {
+    background-color: #1a1a1a;
+    border-color: #555555; /* Рамка становится ещё ярче */
+}
+
+/* Иконка GitHub — делаем её БЕЛОЙ */
+.logo {
+    max-height: 22px;
+    width: auto;
+    filter: invert(1); /* ХАК: автоматически перекрашивает чёрный PNG-логотип в белый цвет */
+}
+
+/* Белый текст */
+.github-text {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 15px;
+    white-space: nowrap;
+}
+		
+
 </style>
 </head>
 <body class="light" id="body-tag">
@@ -587,7 +624,7 @@
     <span class="badge">Android</span> 
     <h3>GS.HTTP Lite</h3> 
     <!-- Описание исправлено на строгое «Анализ HTTP-трафика.» -->
-    <p style="font-size: 14px; opacity: 0.7;" data-key="p_d2">Лёгкий анализ HTTP-трафика.</p> 
+    <p style="font-size: 14px; opacity: 0.7;" data-key="p_d0">Лёгкий анализ HTTP-трафика.</p> 
 
     <!-- Контейнер для двух кнопок сторов --> 
     <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;"> 
@@ -635,12 +672,20 @@
         </a> 
     </div> 
 </div>
-			<div class="card" style="border-style: dashed; opacity: 0.6;">
-                <span class="badge">Windows</span>
-                <h3>GS.Monitor</h3>
-                <p style="font-size: 14px;" data-key="p_dev">В разработке...</p>
-            </div>
-    </section>
+<div class="card">
+    <span class="badge">Windows</span>
+    <h3>GS.Monitor</h3>
+    <p style="font-size: 14px;" data-key="p_dev">Мощный инструмент анализа HTTP-трафикана ПК</p>
+    
+    <!-- ВСТАВЛЕННЫЙ БЛОК GITHUB -->
+    <!-- Замените ССЫЛКУ и путь к ЛОГОТИПУ на свои -->
+        <a href="https://github.com/g60373250-wq/GS.Monitor/releases/tag/v1.0.0" target="_blank" class="main-link-block">
+            <img src="images/logo.png" alt="Логотип" class="logo">
+            <span class="github-text">GitHub</span>
+        </a>
+    </div>
+</div>
+</section>
 
 <!-- Раздел с новостями -->
 <section style="margin-top: 50px; text-align: center;" class="reveal">
@@ -731,12 +776,13 @@
         ru: { 
             title: "GS | Мои проекты",
             w_b: "Перейти",
-            p_h: "Мои проекты", 
+            p_h: "Мои проекты",
+			p_d0: "Лёгкий анализ HTTP-трафика.",
             p_d1: "Анализ HTTP-трафика и API.",
-            p_d2: "Лёгкий анализ HTTP-трафика.",
+            p_d2: "Анализ HTTP-трафика.",
             p_d3: "Новости в ТГК",
             p_d4: "Политика конфиденциальности",
-	    p_d5: "Вопросы-ответы",    
+	    	p_d5: "Вопросы-ответы",    
             p_dev: "В разработке...",
             p_dev_1: "Скоро",
             n_h: "Новости", 
@@ -782,11 +828,12 @@
             title: "GS | My Projects",
             w_b: "Enter",
             p_h: "My Projects", 
+			p_d0: "Lightweight HTTP traffic analysis.",
             p_d1: "HTTP traffic and API analysis.",
-            p_d2: "Lightweight HTTP traffic analysis.",
+            p_d2: "HTTP traffic analysis.",
             p_d3: "News in Telegram",
             p_d4: "Privacy Policy",
-	    p_d5: "Question-answer",
+	    	p_d5: "Question-answer",
             p_dev: "In development...",
             p_dev_1: "Coming Soon",
             n_h: "News", 
