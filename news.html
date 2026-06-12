@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ru" id="html-tag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">Новости — GS</title>
+    <!-- Добавлено мета-описание для SEO -->
+    <meta name="description" content="История обновлений и последние новости проектов GS.HTTP и GS.HTTP Lite от разработчика G. Smerdov.">
+    <style>
+/* Базовые цвета для тем */
+:root {
+    --bg-color: #0f111a;
+    --text-color: #ffffff;
+    --accent-color: #4f46e5;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-hover: rgba(255, 255, 255, 0.06);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.light {
+    --bg-color: #f8fafc;
+    --text-color: #0f172a;
+    --accent-color: #6366f1;
+    --card-bg: rgba(0, 0, 0, 0.02);
+    --card-border: rgba(0, 0, 0, 0.08);
+    --card-hover: rgba(0, 0, 0, 0.04);
+}
+
+/* Принудительно меняем шрифт для всей страницы */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: var(--transition);
+    min-height: 100vh;
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Контейнер новостей */
+.news-container {
+    width: 100%;
+    max-width: 720px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Ссылка Назад */
+.back-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.news-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+}
+
+/* Список новостей (Убираем точки!) */
+.news-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Карточка одной новости */
+.news-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.news-item-date {
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.news-item-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+/* Стилизация внутренностей ( What's new ) */
+.news-item h4 {
+    font-size: 1.1rem;
+    margin: 12px 0 8px 0;
+}
+
+.news-item ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.news-item ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+.news-item ul li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+/* ==========================================
+   ИСПРАВЛЕНИЕ ДЛЯ КНОПКИ MORE DETAILS
+   ========================================== */
+
+/* Убираем дефолтную черную стрелочку у summary */
+summary {
+    list-style: none; /* Для современных браузеров */
+}
+summary::-webkit-details-marker {
+    display: none; /* Для Safari и старых браузеров */
+}
+
+/* Оформляем кнопку More details... */
+summary.faq-trigger, 
+summary {
+    cursor: pointer;
+    outline: none !important; /* Убирает белую/серую рамку при клике */
+    user-select: none;
+    color: var(--accent-color);
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+summary:hover {
+    opacity: 0.8;
+}
+
+/* Фикс для картинок-иконок слева от ссылки Back */
+.news-container img,
+body > img {
+    vertical-align: middle;
+    margin-right: 5px;
+    border-radius: 4px;
+}
+/* ==========================================
+   КРАСИВОЕ ВЫДЕЛЕНИЕ И ИНТЕРАКТИВНОСТЬ
+   ========================================== */
+
+/* Карточка плавно увеличивается и подсвечивается при наведении */
+.news-item {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.4s ease;
+    will-change: transform, box-shadow;
+}
+
+.news-item:hover {
+    transform: translateY(-4px); /* Эффект парения */
+    border-color: var(--accent-color);
+    /* Глубокое неоновое свечение в цвет вашей темы */
+    box-shadow: 0 12px 30px -10px rgba(79, 70, 229, 0.3);
+}
+
+/* Оформляем блок раскрытия контента */
+details {
+    display: block;
+}
+
+/* Стилизуем кнопку раскрытия */
+summary {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    padding: 4px 0;
+    color: var(--accent-color) !important;
+}
+
+/* Добавляем кастомную анимированную стрелочку */
+summary::after {
+    content: "➔";
+    display: inline-block;
+    font-size: 0.8rem;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Поворачиваем стрелочку вниз, когда блок открыт */
+details[open] summary::after {
+    transform: rotate(90deg);
+}
+
+/* Плавное проявление контента внутри открытого блока */
+details[open] > *:not(summary) {
+    animation: fadeInContent 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ==========================================
+   СТИЛИ ДЛЯ КНОПОК ЯЗЫКА И ТЕМЫ
+   ========================================== */
+
+/* ==========================================
+   КНОПКИ ТЕМЫ И ЯЗЫКА В ПРАВОМ ВЕРХНЕМ УГЛУ
+   ========================================== */
+
+.controls-wrapper {
+    position: fixed !important; /* Фиксирует в углу экрана */
+    top: 24px !important;       /* Отступ сверху */
+    right: 24px !important;     /* Отступ справа */
+    left: auto !important;      /* Сбрасывает центрирование влево, если оно было */
+    margin: 0 !important;       /* Убирает любые центрирующие отступы */
+    z-index: 100000 !important; /* Поверх частиц */
+    display: flex !important;   
+    gap: 12px !important;       
+}
+
+/* Адаптивность для мобильных телефонов */
+@media (max-width: 480px) {
+    .controls-wrapper {
+        top: 16px !important;   
+        right: 16px !important;
+        gap: 8px !important;    
+    }
+}
+
+/* Общие стили для круглых кнопок-стекляшек */
+.control-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: var(--transition);
+    user-select: none;
+}
+
+/* Эффекты при наведении */
+.control-btn:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -5px rgba(79, 70, 229, 0.4);
+}
+
+/* Активное состояние кнопки языка при клике */
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+/* Адаптивность для мобильных экранов телефонов */
+@media (max-width: 480px) {
+    .controls-wrapper {
+        top: 12px;
+        right: 12px;
+        gap: 8px;
+    }
+    .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 0.95rem;
+    }
+}
+/* ==========================================
+   КНОПКА НАЗАД В ВЕРХНЕМ ЛЕВОМ УГЛУ
+   ========================================== */
+
+.back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100000; /* Поверх анимации частиц */
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-color) !important; /* Цвет текста зависит от темы */
+    text-decoration: none !important; /* Убираем дефолтное подчеркивание */
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0 20px;
+    height: 46px; /* Одинаковая высота с правыми кнопками */
+    border-radius: 23px; /* Округлые аккуратные края */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: var(--transition);
+    user-select: none;
+}
+
+/* Эффекты при наведении курсора */
+.back:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px); /* Эффект парения */
+    box-shadow: 0 6px 20px -5px rgba(79, 70, 229, 0.4);
+}
+
+.back:active {
+    transform: scale(0.95);
+}
+
+/* Адаптивность для экранов мобильных телефонов */
+@media (max-width: 480px) {
+    .back {
+        top: 12px;
+        left: 12px;
+        height: 40px;
+        padding: 0 14px;
+        font-size: 0.85rem;
+    }
+}
+/* ==========================================
+   ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ КНОПКИ С ПЛАНЕТОЙ
+   ========================================== */
+
+.control-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    /* УДАЛИЛИ жесткий цвет color, чтобы он не ломал SVG */
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: var(--transition);
+    user-select: none;
+    padding: 0; /* Убирает дефолтные отступы браузера */
+}
+
+.lang-icon-svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    /* Принудительно задаем белый цвет для темной темы и темный для светлой */
+    stroke: var(--text-color) !important; 
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: var(--transition);
+}
+
+/* При наведении планета плавно окрашивается в фиолетовый/синий */
+.control-btn:hover .lang-icon-svg {
+    stroke: var(--accent-color) !important;
+}
+
+@media (max-width: 480px) {
+    .control-btn {
+        width: 40px;
+        height: 40px;
+    }
+    .lang-icon-svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+/* ==========================================
+   КРИТИЧЕСКИЙ ФИКС ДЛЯ АНИМАЦИИ РАСКРЫТИЯ
+   ========================================== */
+
+/* 1. Делаем всю карточку кликабельной внешне */
+.news-item {
+    cursor: pointer !important;
+}
+
+/* 2. Контейнер, который ДОЛЖЕН быть скрыт по умолчанию */
+.news-content-scroll {
+    max-height: 0;
+    overflow: hidden !important;
+    /* Плавно анимируем изменение высоты за 0.4 секунды */
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 3. Поворот стрелочки при открытии карточки */
+.news-item.active .more-details-btn .arrow {
+    transform: rotate(90deg) !important;
+}
+
+/* 4. Стили для кнопки "Подробнее", чтобы она выглядела интерактивно */
+.more-details-btn {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    padding: 4px 0;
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.more-details-btn .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+
+
+
+    </style>
+</head>
+<body class="light" id="body-tag">
+
+<!-- Контейнер для верхних кнопок управления -->
+<div class="controls-wrapper">
+    
+    <!-- Кнопка смены языка -->
+    <button id="langBtn" class="control-btn" data-lang="ru">
+        <svg class="lang-icon-svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+    </button>
+
+    <!-- Кнопка смены темы -->
+    <button id="tBtn" class="control-btn">🌙</button>
+
+</div> <!-- Этот тег теперь закроется правильно! -->
+
+
+
+<div class="container">
+    <div class="header">
+        <a href="https://gs-ht.ru" target="_blank" class="back" data-key="b_t">← Назад</a>
+        <h1 style="margin:0" data-key="n_h">Новости</h1>
+    </div>
+
+    <ul class="news-list" id="news-container">
+        <!-- Список новостей генерируется скриптом -->
+    </ul>
+</div>
+
+<script>
+    // Текстовые переводы интерфейса
+    const dict = {
+        ru: { title: "Новости — GS", b_t: "← Назад", n_h: "Новости", s_more: "Подробнее..." },
+        en: { title: "News — GS", b_t: "← Back", n_h: "News", s_more: "More details..." }
+    };
+
+    // База данных новостей на двух языках
+    const newsData = {
+        ru: [
+            {
+                date: "21.05.2026",
+                title: "Обновление GS.HTTP v1.0.3",
+                content: `<h4>Что нового:</h4>
+                    <ul>
+                        <li>— <strong>Версия:</strong> 1.0.3</li>
+                        <li>— <strong>Оптимизация веса:</strong> с 65 МБ до более 10 МБ.</li>
+                        <li>— Приложение полностью перенесено на движок <b>gson</b>.</li>
+                        <li>— Добавлен выбор HTTP-методов: GET, POST, HEAD, PUT.</li>
+                        <li>— Новый инструмент: живой поиск и фильтрация по Заголовкам, Куки и JSON-телу ответа.</li>
+                        <li>— Добавлена кнопка плавного переключения Тёмной/Светлой темы.</li>
+                        <li>— Появилась кнопка «Открыть в браузере» для успешных сканов.</li>
+                        <li>— В раздел инфо улучшена кнопка поддержки и кнопка сайта разработчика.</li>
+                        <li>— Обновлен дизайн иконки приложения (GS).</li>
+                    </ul>`
+            },
+            {
+                date: "16.05.2026",
+                title: "Обновление GS.HTTP.Lite v1.0.6",
+                content: `<h4>Что нового:</h4>
+                    <ul>
+                        <li>— <strong>Версия:</strong> 1.0.6</li>
+                        <li>— <strong>Оптимизация веса:</strong> с 65 МБ до более 10 МБ.</li>
+                        <li>— Улучшена гибкость движка <b>gson</b>.</li>
+                        <li>— Исправлены мелкие ошибки.</li>
+                        <li>— Добавлена рабочая кнопка сайта разработчика.</li>
+                        <li>— Приложение стало легче и быстрее!</li>
+                    </ul>`
+            },
+            {
+                date: "02.05.2026",
+                title: "Обновление GS.HTTP.Lite",
+                content: `<h4>Что нового:</h4>
+                    <ul>
+                        <li>— Added developer website and updated <b>gson</b> engine.</li> 
+                        <li>— The app became even lighter and faster.</li>
+                    </ul>`
+            },
+            {
+                date: "01.05.2026",
+                title: "Запуск проекта GS.HTTP",
+                content: `GS.HTTP — уникальный инструмент для анализа веб-запросов и мониторинга доступности API.`
+            }
+        ],
+        en: [
+            {
+                date: "21.05.2026",
+                title: "GS.HTTP v1.0.3 Update",
+                content: `<h4>What's new:</h4>
+                    <ul>
+                        <li>— <strong>Version:</strong> 1.0.3</li>
+                        <li>— <strong>Size optimization:</strong> from 65 MB to over 100 MB.</li>
+                        <li>— The application has been completely ported to the engine <b>gson</b>.</li>
+                        <li>— Added selection of HTTP methods: GET, POST, HEAD, PUT.</li>
+                        <li>— New tool: live search and filtering by Headers, Cookies, and JSON response body.</li>
+                        <li>— Added a button for smooth switching between Dark/Light themes.</li>
+                        <li>— An "Open in Browser" button has been added for successful scans.</li>
+                        <li>— The support button and the developer's website button have been improved in the info section.</li>
+                        <li>— The design of the application icon (GS) has been updated.</li>
+                    </ul>`
+            },
+            {
+                date: "16.05.2026",
+                title: "GS.HTTP.Lite v1.0.6 Update",
+                content: `<h4>What's new:</h4>
+                    <ul>
+                        <li>— <strong>Version:</strong> 1.0.6</li>
+                        <li>— <strong>Size optimization:</strong> from 65 MB to over 10 MB.</li>
+                        <li>— Improved flexibility of the <b>gson</b> engine.</li>
+                        <li>— Minor bugs fixed.</li>
+                        <li>— Added a working developer website button.</li>
+                        <li>— The app has become lighter and faster!</li>
+                    </ul>`
+            },
+            {
+                date: "02.05.2026",
+                title: "GS.HTTP.Lite Update",
+                content: `<h4>What's new:</h4>
+                    <ul>
+                        <li>— Added developer website and updated <b>gson</b> engine.</li> 
+                        <li>— The app became even lighter and faster.</li>
+                    </ul>`
+            },
+            {
+                date: "01.05.2026",
+                title: "GS.HTTP Project Launch",
+                content: `GS.HTTP is a unique tool for web traffic analysis and API availability monitoring.`
+            }
+        ]
+    };
+
+    let lng = localStorage.getItem('lng') || 'ru';
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    if (isDark) {
+        document.getElementById('body-tag').classList.remove('light');
+        document.getElementById('tBtn').innerText = '🌙';
+    } else {
+        document.getElementById('body-tag').classList.add('light');
+        document.getElementById('tBtn').innerText = '☀️';
+    }
+
+    apply();
+
+    function toggleL() {
+        lng = lng === 'ru' ? 'en' : 'ru';
+        localStorage.setItem('lng', lng);
+        apply();
+    }
+
+    function toggleT() {
+        const body = document.getElementById('body-tag');
+        const tBtn = document.getElementById('tBtn');
+        
+        if (body.classList.contains('light')) {
+            body.classList.remove('light');
+            tBtn.innerText = '🌙';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.classList.add('light');
+            tBtn.innerText = '☀️';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+function apply() {
+    // 1. Установка языка и заголовка страницы
+    document.getElementById('html-tag').setAttribute('lang', lng);
+    document.getElementById('site-title').innerText = dict[lng].title;
+
+    // 2. Перевод статичных элементов шапки
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (dict[lng][key]) el.innerText = dict[lng][key];
+    });
+
+    // 3. Поиск контейнера новостей
+    const container = document.getElementById('news-container');
+    if (!container) return; 
+
+    const existingItems = container.querySelectorAll('.news-item');
+
+    // ==========================================================
+    // ЛОГИКА АКТУАЛИЗАЦИИ ТЕКСТА (ЕСЛИ КАРТОЧКИ УЖЕ СОЗДАНЫ)
+    // ==========================================================
+    if (existingItems.length === newsData[lng].length) {
+        existingItems.forEach((li, index) => {
+            const news = newsData[lng][index];
+            
+            // Переводим дату и заголовок
+            const dateEl = li.querySelector('.news-item-date');
+            const titleEl = li.querySelector('.news-item-title');
+            if (dateEl) dateEl.innerText = news.date;
+            if (titleEl) titleEl.innerText = news.title;
+
+            // Переводим текст кнопки
+            const btnTextEl = li.querySelector('.btn-text');
+            if (btnTextEl) btnTextEl.innerText = dict[lng].s_more;
+
+            // Переводим внутреннее содержимое новости
+            const bodyContent = li.querySelector('.news-content-body');
+            const simpleContent = li.querySelector('.content:not(.news-content-body)');
+
+            if (bodyContent) {
+                bodyContent.innerHTML = news.content;
+                
+                // КРИТИЧЕСКИЙ МОМЕНТ: Если этот блок сейчас открыт,
+                // мы плавно корректируем его высоту под новый объем текста (вдруг на английском строк больше)
+                if (li.classList.contains('active')) {
+                    const scrollContainer = li.querySelector('.news-content-scroll');
+                    if (scrollContainer) {
+                        scrollContainer.style.maxHeight = scrollContainer.scrollHeight + "px";
+                    }
+                }
+            } else if (simpleContent) {
+                simpleContent.innerHTML = news.content;
+            }
+        });
+        
+        return; // Завершаем выполнение функции, чтобы не пересоздавать HTML!
+    }
+
+    // ==========================================================
+    // ЛОГИКА ПЕРВИЧНОГО СОЗДАНИЯ КАРТОЧЕК (ПРИ ЗАГРУЗКЕ СТРАНИЦЫ)
+    // ==========================================================
+    container.innerHTML = ''; // Очищаем только один раз при старте
+
+    newsData[lng].forEach((news, index) => {
+        const li = document.createElement('li');
+        li.className = 'news-item';
+
+        const hasList = news.content.includes('<ul>') || news.content.includes('<h4>');
+
+        let contentHTML = '';
+        if (hasList) {
+            contentHTML = `
+                <div class="more-details-btn">
+                    <span class="btn-text">${dict[lng].s_more}</span>
+                    <span class="arrow">➔</span>
+                </div>
+                <div class="news-content-scroll">
+                    <div class="news-content-body content">
+                        ${news.content}
+                    </div>
+                </div>
+            `;
+        } else {
+            contentHTML = `<div class="content" style="padding-top:10px">${news.content}</div>`;
+        }
+
+        li.innerHTML = `
+            <span class="news-item-date">${news.date}</span>
+            <div class="news-item-title">${news.title}</div>
+            ${contentHTML}
+        `;
+
+        // Навешиваем событие клика на карточку
+        if (hasList) {
+            li.style.cursor = 'pointer';
+            
+            li.onclick = function(e) {
+                if (e.target.closest('a')) return; // Не закрывать при клике на внутренние ссылки
+
+                const scrollContainer = this.querySelector('.news-content-scroll');
+                if (!scrollContainer) return;
+
+                const isActive = this.classList.contains('active');
+
+                // Закрываем все остальные карточки
+                document.querySelectorAll('.news-item').forEach(otherItem => {
+                    if (otherItem !== this) {
+                        otherItem.classList.remove('active');
+                        const openContainer = otherItem.querySelector('.news-content-scroll');
+                        if (openContainer) openContainer.style.maxHeight = null;
+                    }
+                });
+
+                // Переключаем текущую
+                if (isActive) {
+                    this.classList.remove('active');
+                    scrollContainer.style.maxHeight = null;
+                } else {
+                    this.classList.add('active');
+                    scrollContainer.style.maxHeight = scrollContainer.scrollHeight + "px";
+                }
+            };
+        }
+
+        container.appendChild(li);
+    });
+}
+
+
+
+
+
+
+// ==========================================
+// 1. КОНФИГУРАЦИЯ ЦВЕТОВ ДЛЯ ДВУХ ТЕМ ЧАСТИЦ
+// ==========================================
+const canvasThemes = {
+    dark: {
+        particleColor: 'rgba(255, 255, 255, 0.85)',
+        lineColorRGB: '255, 255, 255',
+        lineAlphaModifier: 0.4,
+        mouseAlphaModifier: 0.75
+    },
+    light: {
+        particleColor: 'rgba(50, 50, 60, 0.75)', 
+        lineColorRGB: '50, 50, 60',              
+        lineAlphaModifier: 0.3,
+        mouseAlphaModifier: 0.5
+    }
+};
+
+let currentCanvasColors = canvasThemes.dark;
+
+function syncCanvasTheme() {
+    const body = document.getElementById('body-tag');
+    if (body && body.classList.contains('light')) {
+        currentCanvasColors = canvasThemes.light;
+    } else {
+        currentCanvasColors = canvasThemes.dark;
+    }
+}
+
+// ==========================================
+// 2. РАБОТА КНОПКИ СМЕНЫ ТЕМЫ
+// ==========================================
+const themeBtn = document.getElementById('tBtn');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        const body = document.getElementById('body-tag');
+        if (!body) return;
+
+        const isLight = body.classList.toggle('light');
+        if (isLight) {
+            themeBtn.innerText = '☀️';
+            currentCanvasColors = canvasThemes.light; 
+        } else {
+            themeBtn.innerText = '🌙';
+            currentCanvasColors = canvasThemes.dark; 
+        }
+    });
+}
+
+// ==========================================
+// 3. ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ ОТРИСОВКИ НОВОСТЕЙ
+// ==========================================
+function renderNews(lang = 'ru') {
+    const newsContainer = document.querySelector('.news-list');
+    if (!newsContainer) return;
+
+    let newsHTML = '';
+
+    // Забираем данные из вашей базы newsData
+    newsData[lang].forEach(news => {
+        const btnText = lang === 'ru' ? 'Подробнее...' : 'More details...';
+
+        newsHTML += `
+            <div class="news-item">
+                <span class="news-item-date">${news.date}</span>
+                <div class="news-item-title">${news.title}</div>
+                
+                <div class="more-details-btn">
+                    <span class="btn-text">${btnText}</span>
+                    <span class="arrow">➔</span>
+                </div>
+                
+                <div class="news-content-scroll">
+                    <div class="news-content-body">
+                        ${news.content}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    newsContainer.innerHTML = newsHTML;
+}
+
+// Запуск первичного рендеринга при загрузке страницы
+renderNews('ru');
+
+// ==========================================
+// 4. ИСПРАВЛЕННАЯ ЛОГИКА КЛИКА ПО ПЛАНЕТКЕ (ЯЗЫК)
+// ==========================================
+const langBtn = document.getElementById('langBtn');
+if (langBtn) {
+    langBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Не дает сработать клику по фону карточек
+        
+        const currentLang = langBtn.getAttribute('data-lang');
+        
+        // Меняем только атрибут и перерисовываем массив, иконка-планета внутри не стирается!
+        if (currentLang === 'ru') {
+            langBtn.setAttribute('data-lang', 'en');
+            renderNews('en');
+        } else {
+            langBtn.setAttribute('data-lang', 'ru');
+            renderNews('ru');
+        }
+    });
+}
+
+// ==========================================
+// 5. РАСКРЫТИЕ КАРТОЧЕК ПРИ КЛИКЕ В ЛЮБУЮ ОБЛАСТЬ
+// ==========================================
+document.addEventListener('click', (event) => {
+    // Находим карточку, если кликнули внутри нее
+    const newsItem = event.target.closest('.news-item');
+    if (!newsItem) return;
+
+    const scrollContainer = newsItem.querySelector('.news-content-scroll');
+    const isActive = newsItem.classList.contains('active');
+
+    // Сворачиваем все остальные карточки
+    document.querySelectorAll('.news-item').forEach(item => {
+        if (item !== newsItem) {
+            item.classList.remove('active');
+            const container = item.querySelector('.news-content-scroll');
+            if (container) container.style.maxHeight = null;
+        }
+    });
+
+    // Разворачиваем или сворачиваем текущую
+    if (isActive) {
+        newsItem.classList.remove('active');
+        scrollContainer.style.maxHeight = null;
+    } else {
+        newsItem.classList.add('active');
+        scrollContainer.style.maxHeight = scrollContainer.scrollHeight + "px";
+    }
+});
+
+// ==========================================
+// 6. АВТОНОМНЫЙ СКРИПТ АНИМАЦИИ ЧАСТИЦ
+// ==========================================
+(function() {
+    let canvas = document.getElementById('bgCanvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'bgCanvas';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100vw';
+        canvas.style.height = '100vh';
+        canvas.style.zIndex = '1'; 
+        canvas.style.pointerEvents = 'none'; 
+        document.body.appendChild(canvas); 
+    }
+    
+    const ctx = canvas.getContext('2d');
+    const config = { particleCount: 110, maxDistance: 150, mouseDistance: 180, baseSpeed: 1.2 };
+    let particles = [];
+    const mouse = { x: null, y: null };
+
+    function updateConfigForDevice() {
+        const width = window.innerWidth;
+        if (width < 480) { 
+            config.particleCount = 35;
+            config.maxDistance = 90;
+            config.mouseDistance = 120;
+        } else if (width < 768) { 
+            config.particleCount = 55;
+            config.maxDistance = 110;
+            config.mouseDistance = 140;
+        } else { 
+            config.particleCount = 110;
+            config.maxDistance = 150;
+            config.mouseDistance = 180;
+        }
+    }
+
+    function init() {
+        particles = [];
+        for (let i = 0; i < config.particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const oldCount = config.particleCount;
+        updateConfigForDevice();
+        if (oldCount !== config.particleCount || particles.length === 0) {
+            init(); 
+        }
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+    window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length > 0) {
+            mouse.x = e.touches.clientX;
+            mouse.y = e.touches.clientY;
+        }
+    }, { passive: true });
+    window.addEventListener('touchend', () => { mouse.x = null; mouse.y = null; });
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * config.baseSpeed;
+            this.vy = (Math.random() - 0.5) * config.baseSpeed;
+            this.radius = Math.random() * 1.2 + 1.2; 
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = currentCanvasColors.particleColor; 
+            ctx.fill();
+        }
+    }
+
+    function animate() {
+        syncCanvasTheme();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                let dx = particles[i].x - particles[j].x;
+                let dy = particles[i].y - particles[j].y;
+                let dist = Math.hypot(dx, dy);
+
+                if (dist < config.maxDistance) {
+                    let alpha = (1 - dist / config.maxDistance) * currentCanvasColors.lineAlphaModifier;
+                    if (mouse.x !== null && mouse.y !== null) {
+                        let mDist1 = Math.hypot(particles[i].x - mouse.x, particles[i].y - mouse.y);
+                        if (mDist1 < config.mouseDistance) alpha *= 1.5;
+                    }
+                    ctx.strokeStyle = `rgba(${currentCanvasColors.lineColorRGB}, ${alpha})`;
+                    ctx.lineWidth = 0.6; 
+                    ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                }
+            }
+            if (mouse.x !== null && mouse.y !== null) {
+                let mDx = particles[i].x - mouse.x; let mDy = particles[i].y - mouse.y;
+                let mDist = Math.hypot(mDx, mDy);
+                if (mDist < config.mouseDistance) {
+                    let mAlpha = (1 - mDist / config.mouseDistance) * currentCanvasColors.mouseAlphaModifier;
+                    ctx.strokeStyle = `rgba(${currentCanvasColors.lineColorRGB}, ${mAlpha})`;
+                    ctx.lineWidth = 0.8; 
+                    ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    updateConfigForDevice();
+    resizeCanvas();
+    animate();
+})();
+
+
+
+
+
+</script>
+</body>
+</html>
