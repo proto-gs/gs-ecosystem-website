@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вопрос-Ответ</title>
+<link rel="icon" href="GS Ecosystem.png" type="image/png">
+
+
+    <style>
+        /* БАЗОВЫЕ СТИЛИ (СВЕТЛАЯ ТЕМA ПО УМОЛЧАНИЮ) */
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px), radial-gradient(#cbd5e1 1px, #f8fafc 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 90px 16px 40px 16px;
+            display: flex;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 640px;
+            position: relative;
+        }
+
+        /* ШАПКА САЙТА (ПРИВЯЗАНА К САМЫМ КРАЯМ ЭКРАНА) */
+        .nav-header {
+            position: fixed !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 20px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            height: 44px !important;
+            padding: 0 40px !important; 
+            box-sizing: border-box !important;
+            z-index: 9999 !important;
+        }
+
+        /* КНОПКА НАЗАД В ВИДЕ ОВАЛЬНОЙ КАПСУЛЫ */
+        .back-button {
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 10px 24px !important; 
+            border-radius: 30px !important; 
+            background: transparent;
+            margin: 0 !important;
+            user-select: none !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* Цвета кнопки Назад в покое */
+        body:not(.dark-mode) .back-button { 
+            border: 1px solid rgba(226, 232, 240, 0.8) !important; 
+            color: #1e293b !important;
+        }
+        body.dark-mode .back-button { 
+            border: 1px solid rgba(255, 255, 255, 0.15) !important; 
+            color: #ffffff !important;
+        }
+
+        /* КНОПКА СМЕНЫ ТЕМЫ — ИДЕАЛЬНО КРУГЛАЯ */
+        .theme-toggle {
+            background: transparent !important;
+            border-radius: 50% !important;
+            width: 42px !important;
+            height: 42px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important; 
+            margin: 0 !important;
+            padding: 0 !important;
+            user-select: none !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* Рамки кнопки темы в покое */
+        body:not(.dark-mode) .theme-toggle { border: 1px solid rgba(226, 232, 240, 0.8) !important; }
+        body.dark-mode .theme-toggle { border: 1px solid rgba(255, 255, 255, 0.15) !important; }
+
+        /* Логика отображения смайликов */
+        .theme-toggle .moon-icon { display: none !important; }
+        .theme-toggle .sun-icon { display: block !important; }
+
+        body.dark-mode .theme-toggle .sun-icon { display: none !important; }
+        body.dark-mode .theme-toggle .moon-icon { display: block !important; }
+
+        /* ФИРМЕННАЯ СИНЕ-ФИОЛЕТОВАЯ НЕОНОВАЯ ПОДСВЕТКА ДЛЯ ВЕРХНИХ КНОПОК ПРИ НАВЕДЕНИИ */
+        .back-button:hover,
+        .theme-toggle:hover {
+            border: 1.5px solid #3b42c4 !important; /* Четкий сине-фиолетовый контур */
+            background: rgba(59, 66, 196, 0.15) !important;
+            box-shadow: 0 0 0 1px #3b82f6, 
+                        0 0 14px rgba(99, 102, 241, 0.8), 
+                        inset 0 0 8px rgba(59, 66, 196, 0.6) !important;
+        }
+        .back-button:hover {
+            color: #ffffff !important;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 24px 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* МАССИВНЫЕ КАРТОЧКИ С ВОПРОСАМИ */
+        .news-card {
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(226, 232, 240, 0.9); 
+            border-radius: 20px; 
+            padding: 28px 32px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 
+                        0 8px 10px -6px rgba(0, 0, 0, 0.03); 
+            cursor: pointer;
+            user-select: none;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+
+        /* ТОЧНАЯ НЕОНОВАЯ ПОДСВЕТКА ДЛЯ КАРТОЧЕК ПРИ НАВЕДЕНИИ (НА ПК) */
+        @media (hover: hover) {
+            .news-card:hover {
+                border-color: #3b42c4 !important;
+                background: rgba(59, 66, 196, 0.08) !important;
+                box-shadow: 0 0 0 1px #3b82f6, 
+                            0 12px 24px -4px rgba(99, 102, 241, 0.4), 
+                            inset 0 0 10px rgba(59, 66, 196, 0.3) !important;
+            }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .news-card .title {
+            font-size: 22px; 
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .arrow-icon {
+            font-size: 18px;
+            color: #94a3b8;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        /* АНИМАЦИЯ ДЛЯ ИДЕАЛЬНОЙ ПЛАВНОСТИ (CSS Grid) */
+        .card-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-content {
+            overflow: hidden;
+        }
+
+        .news-card .text {
+            font-size: 16px;
+            color: #475569;
+            line-height: 1.5;
+            padding-top: 14px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        /* АКТИВНОЕ СОСТОЯНИЕ КАРТОЧКИ (РАСКРЫТО) + НЕОНОВОЕ УДЕРЖАНИЕ */
+        .news-card.active {
+            border-color: #3b42c4 !important;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 1px #3b82f6, 
+                        0 15px 30px -5px rgba(99, 102, 241, 0.3),
+                        inset 0 0 10px rgba(59, 66, 196, 0.2) !important;
+        }
+
+        .news-card.active .card-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .news-card.active .text {
+            opacity: 1;
+            transition: opacity 0.25s ease 0.05s;
+        }
+
+        .news-card.active .arrow-icon {
+            transform: rotate(90deg);
+            color: #3b82f6;
+        }
+
+
+        /* СТИЛИ ДЛЯ ТОГО САМОГО ТЁМНОГО РЕЖИМА */
+        body.dark-mode {
+            background-color: #0b0f19;
+            background-image: radial-gradient(#1e293b 0.8px, transparent 0.8px);
+        }
+
+        body.dark-mode .page-title { 
+            color: #ffffff; 
+        }
+
+        body.dark-mode .news-card {
+            background: rgba(17, 22, 37, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.05);
+            box-shadow: none;
+        }
+
+        body.dark-mode .news-card .title { color: #ffffff; }
+        body.dark-mode .news-card .text { color: #94a3b8; }
+
+        /* Развернутая карточка в темном режиме */
+        body.dark-mode .news-card.active { 
+            background-color: rgba(23, 30, 50, 0.85);
+            border-color: #3b42c4 !important;
+            box-shadow: 0 0 0 1px #3b82f6, 
+                        0 15px 30px -5px rgba(99, 102, 241, 0.4),
+                        inset 0 0 12px rgba(59, 66, 196, 0.4) !important;
+        }
+
+
+        /* ПОЛНАЯ АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ ТЕЛЕФОНЫ */
+        @media (max-width: 480px) {
+            body {
+                padding: 80px 12px 30px 12px;
+            }
+            
+            .nav-header {
+                top: 16px !important;
+                padding: 0 16px !important;
+                height: 40px !important;
+            }
+
+            .back-button {
+                padding: 8px 18px !important;
+                font-size: 14px !important;
+            }
+
+            .theme-toggle {
+                width: 38px !important;
+                height: 38px !important;
+                font-size: 18px !important;
+            }
+
+            /* Эффект свечения на мобилках при тапе пальцем */
+            .back-button:active,
+            .theme-toggle:active,
+            .news-card:active {
+                border-color: #3b42c4 !important;
+                background: rgba(59, 66, 196, 0.15) !important;
+                box-shadow: 0 0 0 1px #3b82f6, 0 0 14px rgba(99, 102, 241, 0.7) !important;
+            }
+
+            .page-title {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+            
+            .news-card {
+                padding: 20px !important;
+                border-radius: 16px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .news-card .title {
+                font-size: 18px !important;
+            }
+            
+            .news-card .text {
+                font-size: 14px !important;
+            }
+        }
+
+        /* Контейнер для выравнивания правых кнопок строго в одну линию */
+.header-actions {
+    display: inline-flex !important;
+    flex-direction: row !important; /* Принудительно горизонтально */
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 12px !important; /* Отступ между кнопками */
+    flex-wrap: nowrap !important; /* Запрет переноса на новую строку */
+}
+
+/* На всякий случай сбрасываем внешние отступы у кнопок внутри этого контейнера */
+.header-actions .theme-toggle,
+.header-actions .lang-toggle {
+    margin: 0 !important;
+}
+
+
+        /* КНОПКА СМЕНЫ ЯЗЫКА — ИДЕНТИЧНА КНОПКЕ ТЕМЫ */
+.lang-toggle {
+    background: transparent !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 0 0 12px !important; /* Отступ от кнопки темы */
+    padding: 0 !important;
+    user-select: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Рамки кнопки языка в покое */
+body:not(.dark-mode) .lang-toggle { border: 1px solid rgba(226, 232, 240, 0.8) !important; }
+body.dark-mode .lang-toggle { border: 1px solid rgba(255, 255, 255, 0.15) !important; }
+
+/* Подсветка при наведении */
+.lang-toggle:hover {
+    border: 1.5px solid #3b42c4 !important;
+    background: rgba(59, 66, 196, 0.15) !important;
+    box-shadow: 0 0 0 1px #3b82f6, 0 0 14px rgba(99, 102, 241, 0.8), inset 0 0 8px rgba(59, 66, 196, 0.6) !important;
+}
+
+/* Стилизация SVG иконки глобуса */
+.lang-toggle svg {
+    width: 22px;
+    height: 22px;
+    stroke: #1e293b;
+    transition: stroke 0.25s ease;
+}
+body.dark-mode .lang-toggle svg {
+    stroke: #ffffff;
+}
+
+/* Логика скрытия/показа текстов */
+body:not(.en-mode) [data-en] { display: none !important; }
+body.en-mode [data-ru] { display: none !important; }
+
+/* Адаптивность для мобильных */
+@media (max-width: 480px) {
+    .lang-toggle {
+        width: 38px !important;
+        height: 38px !important;
+        margin-left: 8px !important;
+    }
+    .lang-toggle:active {
+        border-color: #3b42c4 !important;
+        background: rgba(59, 66, 196, 0.15) !important;
+        box-shadow: 0 0 0 1px #3b82f6, 0 0 14px rgba(99, 102, 241, 0.7) !important;
+    }
+}
+
+
+
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+<div class="nav-header">
+    <a href="https://gs-ht.ru" class="back-button">
+        <span data-ru>← Назад</span>
+        <span data-en>← Back</span>
+    </a>
+    
+    <!-- Кнопки темы и языка внутри общего контейнера -->
+    <div class="header-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Смена темы">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+        
+        <button class="lang-toggle" onclick="toggleLang()" aria-label="Смена языка">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+
+        
+<h1 class="page-title">
+    <span data-ru>Вопрос — Ответ</span>
+    <span data-en>FAQ — Questions & Answers</span>
+</h1>
+
+
+ <!-- Блок 1 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>1. Что представляют собой приложения GS.HTTP?</span>
+                    <span data-en>1. What are GS.HTTP applications?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Это специализированные мобильные утилиты, предназначенные для быстрой проверки HTTP-запросов, анализа ответов серверов и оперативной диагностики веб-сайтов.</span>
+                        <span data-en>These are specialized mobile utilities designed for quick verification of HTTP requests, analysis of server responses, and prompt website diagnostics.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Блок 2 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>2. В чем главное различие между полной версией GS.HTTP и облегченной GS.HTTP.Lite?</span>
+                    <span data-en>2. What is the main difference between the full version of GS.HTTP and the lightweight GS.HTTP.Lite?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Версия Lite оптимизирована для работы на слабых устройствах и включает только базовые функции проверки статус-кодов и заголовков ответов.</span>
+                        <span data-en>The Lite version is optimized for low-end devices and includes only basic features for checking status codes and response headers.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Блок 3 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>3. Как с помощью приложения узнать HTTP-статус веб-ресурса?</span>
+                    <span data-en>3. How do I find out the HTTP status of a web resource using the app?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Достаточно ввести URL-адрес интересующего вас сайта в поисковую строку на главном экране приложения и нажать кнопку «ПРОВЕРИТЬ» для отправки запроса.</span>
+                        <span data-en>Simply enter the URL of the site you are interested in into the search bar on the main screen of the app and press the "CHECK" button to send the request.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 4 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>4. Можно ли в GS.HTTP анализировать технические заголовки (Headers)?</span>
+                    <span data-en>4. Is it possible to analyze technical headers in GS.HTTP?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Да, после отправки запроса и получения ответа от сервера приложение выводит полный список всех технических заголовков для их детального анализа разработчиком или администратором.</span>
+                        <span data-en>Yes, after sending a request and receiving a response from the server, the app displays a complete list of all technical headers for detailed analysis by a developer or administrator.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Блок 5 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>5. Поддерживают ли утилиты форматирование и чтение JSON-данных?</span>
+                    <span data-en>5. Do the utilities support JSON data formatting and reading?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Полная версия GS.HTTP позволяет просматривать и автоматически форматировать сырые JSON-ответы в структурированный, древовидный и удобный для чтения вид.</span>
+                        <span data-en>The full version of GS.HTTP allows you to view and automatically format raw JSON responses into a structured, tree-like, and easy-to-read format.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 6 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>6. Могу ли я проверить файлы Cookies, которые устанавливает сайт?</span>
+                    <span data-en>6. Can I check the Cookies set by a website?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Да, полноценная функция просмотра, фильтрации и анализа файлов Cookies, возвращаемых веб-ресурсами, интегрирована в интерфейс приложения.</span>
+                        <span data-en>Yes, a fully functional feature for viewing, filtering, and analyzing Cookies returned by web resources is integrated into the application interface.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Блок 7 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>7. Требуется ли регистрация или создание аккаунта для использования утилит?</span>
+                    <span data-en>7. Is registration or account creation required to use the utilities?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Нет, оба приложения полностью минималистичны. Весь диагностический функционал доступен пользователю сразу после запуска без ввода личных данных и авторизации.</span>
+                        <span data-en>No, both applications are completely minimalist. All diagnostic functionality is available to the user immediately upon launch, without entering personal data or authorization.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 8 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>8. Собирают ли приложения GS.HTTP историю проверяемых мной сайтов?</span>
+                    <span data-en>8. Do GS.HTTP applications collect the history of the websites I check?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Программы работают исключительно локально на вашем устройстве и не занимаются скрытым сбором, хранением или передачей персональной информации третьим лицам.</span>
+                        <span data-en>The programs work exclusively locally on your device and do not engage in hidden collection, storage, or transmission of personal information to third parties.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Блок 9 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>9. На каких устройствах и операционных системах работают данные приложения?</span>
+                    <span data-en>9. On which devices and operating systems do these applications work?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Данные утилиты разработаны исключительно для мобильной операционной системы Android и предназначены только для установки на Android-смартфоны.</span>
+                        <span data-en>These utilities are developed exclusively for the Android mobile operating system and are intended only for installation on Android smartphones.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Блок 10 -->
+        <div class="news-card" onclick="toggleCard(this)">
+            <div class="card-header">
+                <h2 class="title">
+                    <span data-ru>10. Где можно посмотреть всю техническую информацию и сведения о приложении?</span>
+                    <span data-en>10. Where can I view all technical details and information about the application?</span>
+                </h2>
+                <span class="arrow-icon">➔</span>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-content">
+                    <div class="text">
+                        <span data-ru>Вся актуальная техническая информация, номер текущей сборки и правовые сведения находятся в кнопке «Информация» в главном меню приложения.</span>
+                        <span data-en>All up-to-date technical information, the current build number, and legal information can be found under the "Information" button in the application's main menu.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    <script>
+        function toggleCard(card) {
+            // Если блок уже открыт — просто закрываем его
+            if (card.classList.contains('active')) {
+                card.classList.remove('active');
+                return;
+            }
+
+            // Закрываем прошлый открытый блок
+            const activeCard = document.querySelector('.news-card.active');
+            if (activeCard) {
+                activeCard.classList.remove('active');
+            }
+
+            // Открываем текущий блок
+            card.classList.add('active');
+        }
+	function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+/* Скрипт плавного аккордеона */
+function toggleCard(card) {
+    if (card.classList.contains('active')) {
+        card.classList.remove('active');
+        return;
+    }
+
+    const activeCard = document.querySelector('.news-card.active');
+    if (activeCard) {
+        activeCard.classList.remove('active');
+    }
+
+    card.classList.add('active');
+}
+
+/* Скрипт переключения темы */
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+
+/* Скрипт переключения языка */
+function toggleLang() {
+    document.body.classList.toggle('en-mode');
+}
+
+
+/* Скрипт плавного аккордеона */
+function toggleCard(card) {
+    if (card.classList.contains('active')) {
+        card.classList.remove('active');
+        return;
+    }
+
+    const activeCard = document.querySelector('.news-card.active');
+    if (activeCard) {
+        activeCard.classList.remove('active');
+    }
+
+    card.classList.add('active');
+}
+
+/* Скрипт переключения темы */
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+
+/* Скрипт плавного аккордеона */
+function toggleCard(card) {
+    if (card.classList.contains('active')) {
+        card.classList.remove('active');
+        return;
+    }
+
+    const activeCard = document.querySelector('.news-card.active');
+    if (activeCard) {
+        activeCard.classList.remove('active');
+    }
+
+    card.classList.add('active');
+}
+
+/* Скрипт переключения темы */
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+
+/* Скрипт плавного аккордеона */
+function toggleCard(card) {
+    if (card.classList.contains('active')) {
+        card.classList.remove('active');
+        return;
+    }
+
+    const activeCard = document.querySelector('.news-card.active');
+    if (activeCard) {
+        activeCard.classList.remove('active');
+    }
+
+    card.classList.add('active');
+}
+
+/* Скрипт переключения темы */
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+}
+
+/* ИНТЕРАКТИВНЫЙ CANVAS: БЕЗ ПРИТЯЖЕНИЯ, СОЕДИНЕНИЕ С КУРСOРОМ ПРИ НАВЕДЕНИИ */
+(function() {
+    const canvas = document.createElement('canvas');
+    document.body.insertBefore(canvas, document.body.firstChild);
+    const ctx = canvas.getContext('2d');
+
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.zIndex = '-1'; 
+    canvas.style.pointerEvents = 'none'; 
+
+    let points = [];
+    const maxPoints = 80;       // Уменьшено со 180 до 80 частиц
+    const connectionDist = 160; 
+    const speedMultiplier = 2.2; 
+
+    // Координаты курсора мыши
+    let mouse = { x: null, y: null, radius: 180 };
+
+    // Отслеживаем движение мыши на ПК
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    // Скрываем связи, если курсор ушел за экран
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    // Отслеживаем касания на смартфонах
+    window.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }
+    });
+
+    window.addEventListener('touchend', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    function getThemeColors() {
+        const isDark = document.body.classList.contains('dark-mode');
+        return {
+            pointColor: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(15, 23, 42, 0.65)',
+            lineColor: isDark ? 'rgba(255, 255, 255, ' : 'rgba(15, 23, 42, '
+        };
+    }
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Генерация точек с естественным свободным полётом
+    for (let i = 0; i < maxPoints; i++) {
+        points.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * speedMultiplier, 
+            vy: (Math.random() - 0.5) * speedMultiplier  
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const colors = getThemeColors();
+
+        // 1. Обычное свободное движение и отрисовка точек (без внешних сил)
+        points.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+
+            // Идеальный отскок от границ экрана
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2); 
+            ctx.fillStyle = colors.pointColor;
+            ctx.fill();
+        });
+
+        // 2. Отрисовка линий
+        for (let i = 0; i < points.length; i++) {
+            const p1 = points[i];
+
+            // Связи между самими точками (фоновая паутина)
+            for (let j = i + 1; j < points.length; j++) {
+                const p2 = points[j];
+                const dx = p1.x - p2.x;
+                const dy = p1.y - p2.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < connectionDist) {
+                    const alpha = (1 - dist / connectionDist) * 0.45; 
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = colors.lineColor + alpha + ')';
+                    ctx.lineWidth = 0.9;
+                    ctx.stroke();
+                }
+            }
+
+            // МГНОВЕННОЕ СОЕДИНЕНИЕ ЛИНИЙ С КУРСOРОМ ПРИ НАВЕДЕНИИ (БЕЗ ПРИТЯЖЕНИЯ)
+            if (mouse.x !== null && mouse.y !== null) {
+                const mdx = p1.x - mouse.x;
+                const mdy = p1.y - mouse.y;
+                const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+                // Если пролетающая точка оказывается в радиусе мыши — пускаем к ней линию
+                if (mdist < mouse.radius) {
+                    const mAlpha = (1 - mdist / mouse.radius) * 0.55; // Плавное затухание нитей к краю радиуса
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = colors.lineColor + mAlpha + ')';
+                    ctx.lineWidth = 1.2; // Линии к курсору делаем чёткими
+                    ctx.stroke();
+                }
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+})();
+
+
+
+    </script>
+
+</body>
+</html>
+
+
+
+
