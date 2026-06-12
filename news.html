@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="site-title">Новости — GS</title>
-    <link rel="icon" href="images/GS Ecosystem.png" type="image/png">
     <!-- Добавлено мета-описание для SEO -->
     <meta name="description" content="История обновлений и последние новости проектов GS.HTTP и GS.HTTP Lite от разработчика G. Smerdov.">
     <style>
@@ -486,6 +485,27 @@ details[open] > *:not(summary) {
     const newsData = {
         ru: [
             {
+            date: "09.06.2026",
+            title: "Большое обновление интерфейса и функционала приложения GS.HTTP.Lite",
+            content: `<h4>Изменения в интерфейсе главного меню:</h4>
+                <ul>
+                    <li>— <strong>Управление данными:</strong> вся информация о приложении и его параметры теперь объединены в разделе «Настройки».</li>
+                    <li>— <strong>Автоматический переход (Автодирект):</strong> в настройки добавлена функция, которая при поиске автоматически устанавливает безопасное соединение по протоколу https://.</li>
+                    <li>— <strong>Смена темы:</strong> добавлена кнопка переключения темы оформления, которая синхронизируется с системными настройками устройства.</li>
+                    <li>— <strong>Очистка истории ввода:</strong> встроена кнопка быстрого удаления истории в один клик.</li>
+                    <li>— <strong>Оптимизация пространства:</strong> кнопка «Приступить» перенесена в нижнюю часть экрана для более минималистичного дизайна.</li>
+                </ul>
+                <h4>Изменение интерфейса сканера:</h4>
+                <ul>
+                    <li>— Добавлен современный минималистичный дизайн главного экрана с быстрыми вкладками HTTP-методов (GET, POST, HEAD, PUT).</li>
+                    <li>— <strong>Раздельные экраны настроек:</strong> для экрана сканирования создана независимая кастомная шторка параметров.</li>
+                    <li>— <strong>Новые параметры сети и безопасности:</strong> конфигурации таймаута (5, 10, 15 сек), автоследование редиректам (3xx) и тумблер проверки SSL.</li>
+                    <li>— <strong>Интеграция истории:</strong> полноценная система логирования проверок с возможностью быстрой очистки.</li>
+                    <li>— <strong>Оптимизация UI:</strong> исправлена читаемость элементов в светлой теме; шторки поддерживают плавный свайп на весь экран.</li>
+                </ul>`
+            },
+        
+            {
                 date: "21.05.2026",
                 title: "Обновление GS.HTTP v1.0.3",
                 content: `<h4>Что нового:</h4>
@@ -530,6 +550,27 @@ details[open] > *:not(summary) {
             }
         ],
         en: [
+            {
+            date: "09.06.2026",
+            title: "Major Interface & Feature Update app GS.HTTP.Lite",
+            content: `<h4>Main Menu Interface Changes:</h4>
+                <ul>
+                    <li>— <strong>Data Management:</strong> all app information and parameters are now combined under "Settings".</li>
+                    <li>— <strong>Auto-Redirect:</strong> added a feature to automatically establish a secure https:// connection during searches.</li>
+                    <li>— <strong>Theme Toggle:</strong> added an interface theme switch that synchronizes with device system settings.</li>
+                    <li>— <strong>Clear Input History:</strong> built-in button for quick one-click history deletion.</li>
+                    <li>— <strong>Space Optimization:</strong> the "Get Started" button has been moved to the bottom for a more minimalist layout.</li>
+                </ul>
+                <h4>Scanner Interface Changes:</h4>
+                <ul>
+                    <li>— Added a modern, minimalist home screen design with quick tabs for HTTP methods (GET, POST, HEAD, PUT).</li>
+                    <li>— <strong>Separate Settings Screens:</strong> the scanning screen now features an independent custom settings sheet.</li>
+                    <li>— <strong>New Network & Security Options:</strong> request timeout configs (5, 10, 15s), auto-redirect follow (3xx), and strict SSL check toggle.</li>
+                    <li>— <strong>History Integration:</strong> full logging system for past scans with quick clear capabilities.</li>
+                    <li>— <strong>UI Optimization:</strong> improved element readability in the light theme; settings sheets now support smooth full-screen swipe-up.</li>
+                </ul>`
+            },
+
             {
                 date: "21.05.2026",
                 title: "GS.HTTP v1.0.3 Update",
