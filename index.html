@@ -1,1423 +1,520 @@
-
-<!DOCTYPE html>
-<html lang="ru" id="html-tag" style="scroll-behavior: smooth;">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html lang="ru" style="scroll-behavior: smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="site-title">GS | Мои проекты</title>
-	<link rel="icon" href="images/GS Ecosystem.png" type="image/png">
-    <!-- Мета-описание для поисковых систем (SEO) -->
-    <meta name="description" content="Портфолио разработчика G. Smerdov. Проекты GS.HTTP и GS.HTTP Lite для анализа HTTP-трафика и API.">
-    
-    <style>
-        :root { --bg: #050505; --card: #111; --acc: #2979FF; --txt: #fff; --brd: #1A1A1A; --heart: #FF1744; }
-        .light { --bg: #f5f7fa; --card: #fff; --txt: #1a1a1a; --brd: #e1e4e8; }
-        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--txt); margin: 0; transition: 0.3s; }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-        .btn, .card, .c-btn { border-radius: 12px; border: 1px solid var(--brd); transition: 0.2s; }
-        .btn:active { transform: scale(0.96); }
-        .controls { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
-        .c-btn { width: 40px; height: 40px; background: var(--card); color: var(--txt); cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        header { text-align: center; margin-bottom: 60px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: var(--card); padding: 20px; text-decoration: none; color: inherit; }
-        .card:hover { border-color: var(--acc); }
-        .badge { font-size: 10px; font-weight: 700; padding: 4px 8px; background: var(--brd); border-radius: 6px; text-transform: uppercase; }
-        .more-btn { display: inline-block; margin-top: 20px; color: var(--acc); font-weight: 700; text-decoration: none; border: 1px solid var(--acc); padding: 10px 20px; border-radius: 10px; cursor: pointer; background: none; }
-        .more-btn:hover { background: var(--acc); color: #fff; }
-/* Возвращаем приветственное окно на самый верхний слой */
-/* Полностью непрозрачное приветственное окно поверх всего сайта */
-#welcome {
-    position: fixed;
-    inset: 0;
-    background: rgba(5, 5, 5, 0.7); /* Изменили сплошной цвет на прозрачный */
-    backdrop-filter: blur(8px); /* Добавили размытие заднего плана */
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    transition: 0.5s;
-}
-
-/* Настройки прозрачности welcome-экрана для светлой темы */
-.light #welcome {
-    background: rgba(245, 247, 250, 0.7);
-}
-
-
-
-        
-/* ==========================================
-   ИСПРАВЛЕНИЕ ВЫРАВНИВАНИЯ И СПОЙЛЕРОВ
-   ========================================== */
-
-/* Карточка новости */
-.news-card {
-    cursor: pointer !important;
-}
-
-.news-item {
-    display: block !important;
-    width: 100% !important;
-    text-align: left !important; /* Принудительно выравниваем текст по левому краю */
-}
-
-.news-item-title {
-    font-size: 1.3rem !important;
-    font-weight: 700 !important;
-    text-align: left !important;
-    margin-bottom: 4px !important;
-}
-
-/* Кнопка "Подробнее" */
-.more-details-btn {
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    font-size: 13px !important;
-    color: var(--acc) !important;
-    font-weight: 600 !important;
-    margin-top: 12px !important;
-    text-align: left !important;
-}
-
-.more-details-btn .arrow {
-    display: inline-block !important;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Поворот стрелочки при открытии */
-.news-card.active .more-details-btn .arrow {
-    transform: rotate(90deg) !important;
-}
-
-/* Скрываемый контейнер (Grid-сетка) */
-.news-content-scroll {
-    display: grid !important;
-    grid-template-rows: 0fr !important; /* Изначально скрыт */
-    overflow: hidden !important;
-    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Раскрытие при добавлении класса active */
-.news-card.active .news-content-scroll {
-    grid-template-rows: 1fr !important;
-}
-
-.news-content-body {
-    min-height: 0 !important;
-    padding-top: 16px !important;
-    text-align: left !important; /* Выравнивание контента внутри */
-}
-
-.news-content-body h4 {
-    font-size: 1.1rem !important;
-    margin-bottom: 10px !important;
-    text-align: left !important;
-}
-
-/* Красивые списки с дефисами */
-.news-content-body ul {
-    list-style: none !important; /* Полностью убираем дефолтные белые точки слева */
-    padding: 0 !important;
-    margin: 0 !important;
-    text-align: left !important;
-}
-
-.news-content-body ul li {
-    position: relative !important;
-    padding-left: 20px !important; /* Отступ под кастомный дефис */
-    margin-bottom: 8px !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    text-align: left !important;
-    list-style-type: none !important;
-}
-
-/* Автоматический дефис вместо точек */
-.news-content-body ul li::before {
-    content: "—" !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    color: var(--acc) !important;
-    font-weight: bold !important;
-}
-
-
-
-        /* Стили для спойлеров и кнопок копирования */
-        summary.news-title { list-style: none; cursor: pointer; outline: none; padding-right: 20px; position: relative; }
-        summary.news-title::-webkit-details-marker { display: none; }
-        summary.news-title::after { content: '▸'; position: absolute; right: 0; top: 0; color: var(--acc); transition: transform 0.2s; }
-        details[open] summary.news-title::after { transform: rotate(90deg); }
-        .share-btn { background: none; border: none; cursor: pointer; font-size: 14px; opacity: 0.5; padding: 0; transition: 0.2s; margin-top: -3px; }
-        .share-btn:hover { opacity: 1; transform: scale(1.1); }
-
-        /* Стили для Toast-уведомлений */
-        #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
-        .toast { background: var(--card); color: var(--txt); border: 1px solid var(--brd); padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transform: translateY(20px); transition: 0.3s; }
-        .toast.show { opacity: 1; transform: translateY(0); }
-
-        /* Стили для контактов */
-        .contacts-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 20px; }
-        .contact-link { display: flex; align-items: center; gap: 8px; font-size: 14px; color: inherit; text-decoration: none; background: var(--card); border: 1px solid var(--brd); padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: 0.2s; }
-        .contact-link:hover { border-color: var(--acc); background: rgba(41, 121, 255, 0.05); }
-        
-        /* Стилизация кнопки CloudTips с анимацией пульсации */
-        .contact-link.tips-btn:hover { border-color: var(--heart); background: rgba(255, 23, 68, 0.05); }
-        .contact-link.tips-btn:hover span { animation: pulse 0.8s infinite alternate; display: inline-block; }
-        @keyframes pulse { 
-            0% { transform: scale(1); } 
-            100% { transform: scale(1.3); } 
-        }
-
-        /* Стили кастомного скроллбара */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--brd); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--acc); }
-
-        /* Эффект плавного появления при скролле (Scroll Reveal) */
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-/* ==========================================
-   ФИНАЛЬНЫЙ ФИКС ВЫРАВНИВАНИЯ И КЛИКОВ
-   ========================================== */
-
-/* Делаем всю карточку кликабельной */
-.news-card {
-    cursor: pointer !important;
-    text-align: left !important; /* Убираем центрирование текста */
-}
-
-.news-item {
-    text-align: left !important;
-}
-
-.news-item-title {
-    font-size: 1.3rem !important;
-    font-weight: 700 !important;
-    text-align: left !important;
-}
-
-/* Кнопка "Подробнее" со стрелочкой */
-.more-details-btn {
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    font-size: 13px !important;
-    color: var(--acc) !important;
-    font-weight: 600 !important;
-    margin-top: 12px !important;
-    text-align: left !important;
-}
-
-.more-details-btn .arrow {
-    display: inline-block !important;
-    transition: transform 0.3s ease !important;
-}
-
-/* Поворот стрелочки при открытии карточки */
-.news-card.active .more-details-btn .arrow {
-    transform: rotate(90deg) !important;
-}
-
-/* Скрытие контента через сетку Grid */
-.news-content-scroll {
-    display: grid !important;
-    grid-template-rows: 0fr !important; /* По умолчанию скрыто */
-    overflow: hidden !important;
-    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Раскрытие сетки при клике (добавлении класса active) */
-.news-card.active .news-content-scroll {
-    grid-template-rows: 1fr !important;
-}
-
-.news-content-body {
-    min-height: 0 !important;
-    padding-top: 16px !important;
-    text-align: left !important;
-}
-
-.news-content-body h4 {
-    text-align: left !important;
-    font-size: 1.1rem !important;
-    margin-bottom: 10px !important;
-}
-
-/* Полное удаление улетевших стандартных точек */
-.news-content-body ul {
-    list-style: none !important; 
-    padding: 0 !important;
-    margin: 0 !important;
-    text-align: left !important;
-}
-
-.news-content-body ul li {
-    position: relative !important;
-    padding-left: 20px !important; /* Отступ для красивого дефиса */
-    margin-bottom: 8px !important;
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
-    text-align: left !important;
-    list-style-type: none !important;
-}
-
-/* Новые автоматические маркеры-дефисы */
-.news-content-body ul li::before {
-    content: "—" !important;
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    color: var(--acc) !important;
-    font-weight: bold !important;
-}
-
-/* --- СТИЛИ АНИМАЦИИ ЛОГОТИПА --- */
-.logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    margin: 0 auto 10px auto;
-}
-
-.main-letter {
-    font-size: 5rem;
-    font-weight: 800;
-    color: var(--txt); /* Переменная цвета текста сайта */
-    text-transform: uppercase;
-    line-height: 1;
-    user-select: none;
-}
-
-.extra-text {
-    font-size: 3.8rem;
-    font-weight: 600;
-    color: var(--txt);
-    opacity: 0.7; /* Делаем выезжающий текст чуть мягче */
-    line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    opacity: 0;
-    max-width: 0;
-}
-
-.text-g {
-    padding-left: 4px;
-    animation: expandTextG 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-.text-s {
-    padding-left: 4px;
-    animation: expandTextS 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-.divider {
-    width: 2px;
-    background-color: var(--brd); /* Граница в цвет текущей темы */
-    border-radius: 1px;
-    height: 0;
-    opacity: 0;
-    margin: 0;
-    animation: showDivider 7s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-@keyframes showDivider {
-    0%, 15%, 85%, 100% { height: 0; opacity: 0; margin: 0; }
-    28%, 72% { height: 60px; opacity: 1; margin: 0 15px; }
-}
-
-@keyframes expandTextG {
-    0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -10px; }
-    28%, 72% { opacity: 1; max-width: 220px; letter-spacing: normal; }
-}
-
-@keyframes expandTextS {
-    0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -10px; }
-    28%, 72% { opacity: 1; max-width: 150px; letter-spacing: normal; }
-}
-
-/* Адаптивность для мобильных экранов */
-@media (max-width: 480px) {
-    .logo-container { height: 60px; }
-    .main-letter { font-size: 2.8rem; }
-    .extra-text { font-size: 2.1rem; }
-    @keyframes showDivider {
-        0%, 15%, 85%, 100% { height: 0; opacity: 0; margin: 0; }
-        28%, 72% { height: 35px; opacity: 1; margin: 0 8px; }
-    }
-    @keyframes expandTextG {
-        0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -5px; }
-        28%, 72% { opacity: 1; max-width: 120px; letter-spacing: normal; }
-    }
-    @keyframes expandTextS {
-        0%, 15%, 85%, 100% { opacity: 0; max-width: 0; letter-spacing: -5px; }
-        28%, 72% { opacity: 1; max-width: 80px; letter-spacing: normal; }
-    }
-}
-/* --- СТИЛИ РАЗДЕЛА: ДИЗАЙН ПРОЕКТОВ --- */
-.slider-window {
-    position: relative;
-    width: 100%;
-    max-width: 1000px;
-    padding: 30px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-}
-
-/* Окно просмотра: центрирует элементы и скрывает полосу прокрутки браузера */
-.slider-viewport {
-    width: 100%;
-    max-width: 800px; /* Ширина, чтобы было видно боковые телефоны */
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    display: flex;
-    justify-content: flex-start;
-    scrollbar-width: none; /* Скрываем скроллбар в Firefox */
-}
-
-.slider-viewport::-webkit-scrollbar {
-    display: none; /* Скрываем скроллбар в Chrome/Safari */
-}
-
-/* Длинная лента со всеми смартфонами */
-.slider-track {
-    display: flex;
-    gap: 40px;
-    /* Добавляем отступы по бокам, чтобы первый и последний слайды могли встать ровно по центру */
-    padding: 0 calc(50% - 130px); 
-}
-
-/* Стиль смартфона */
-.phone-card {
-    width: 260px;
-    flex-shrink: 0;
-    transition: opacity 0.4s, transform 0.4s, filter 0.4s;
-    opacity: 0.3;
-    filter: blur(1.5px);
-    transform: scale(0.85);
-}
-
-/* Класс активного центрального экрана */
-.phone-card.active {
-    opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
-}
-
-.phone-card img {
-    width: 100%;
-    display: block;
-    height: auto;
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-
-/* Кнопки-стрелки */
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    background-color: #ffffff;
-    border: 1px solid #eaeaea;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-    transition: background-color 0.2s;
-}
-
-.nav-btn:hover { background-color: #f9f9f9; }
-.nav-btn svg { width: 22px; height: 22px; fill: #4a4a4a; }
-.prev-btn { left: 20px; }
-.next-btn { right: 20px; }
-
-/* Описание под телефонами */
-.slider-description {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 1.05em; /* Сделали шрифт чуть крупнее и выразительнее */
-    font-weight: 500;  /* Сделали текст немного плотнее */
-    
-    /* Самое важное изменение: */
-    color: inherit;    /* Текст автоматически станет чёрным на светлой теме и белым на тёмной */
-    
-    min-height: 40px;
-    padding: 0 20px;
-    font-family: Arial, sans-serif;
-    opacity: 0.9;      /* Добавит мягкости внешнему виду */
-}
-
-
-/* Индикаторы */
-.dots-container {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-.dot {
-    width: 8px;
-    height: 8px;
-    background-color: #555555;
-    border-radius: 50%;
-    transition: background-color 0.3s;
-}
-
-.dot.active { background-color: #ffffff; }
-
-/* Обновлённые стили для идеальной видимости на тёмном фоне */
-.main-link-block {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 20px;
-    background: #111111; /* Тёмный фон кнопки */
-    border: 1px solid #333333; /* Сделали рамку контрастнее, чтобы её было видно */
-    border-radius: 10px;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
-    width: fit-content;
-    margin-top: 15px;
-}
-
-/* Эффект при наведении */
-.main-link-block:hover {
-    background-color: #1a1a1a;
-    border-color: #555555; /* Рамка становится ещё ярче */
-}
-
-/* Иконка GitHub — делаем её БЕЛОЙ */
-.logo {
-    max-height: 22px;
-    width: auto;
-    filter: invert(1); /* ХАК: автоматически перекрашивает чёрный PNG-логотип в белый цвет */
-}
-
-/* Белый текст */
-.github-text {
-    color: #ffffff;
-    font-weight: 500;
-    font-size: 15px;
-    white-space: nowrap;
-}
-		
-
-</style>
-</head>
-<body class="light" id="body-tag">
-
-
-
-<!-- Контейнер для всплывающих уведомлений -->
-<div id="toast-container"></div>
-
-<!-- Индикатор прогресса прокрутки -->
-<div id="scroll-progress" style="position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--acc); z-index: 1001; transition: width 0.1s ease-out;"></div>
-
-<div id="welcome">
-    <div class="logo-container" style="margin-bottom: 20px;">
-        <div class="main-letter">G</div>
-        <div class="extra-text text-g">S.HTTP</div>
-        <div class="divider"></div>
-        <div class="main-letter">S</div>
-        <div class="extra-text text-s">peed</div>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="images/GS Ecosystem.png" type="image/png" />
+    <link rel="apple-touch-icon" href="images/GS Ecosystem.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="description"
+      content="Портфолио разработчика G. Smerdov. Проекты GS.HTTP и GS.HTTP Lite для анализа HTTP-трафика и API."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GS | Анализ HTTP-трафика" />
+    <meta
+      property="og:description"
+      content="Мощные и легкие инструменты анализа HTTP-трафика и API для ПК и Android."
+    />
+    <meta property="og:image" content="https://gs-ht.ru Ecosystem.png" />
+    <meta property="og:url" content="https://gs-ht.ru" />
+  </head>
+  <body class="light" id="body-tag">
+    <div id="toast-container"></div>
+    <div
+      id="scroll-progress"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 4px;
+        background: var(--acc);
+        z-index: 1001;
+        transition: width 0.1s ease-out;
+      "
+    ></div>
+    <div class="controls">
+      <button class="c-btn" id="langBtn">🌐</button>
+      <button class="c-btn" onclick="toggleTheme()" id="tBtn">☀️</button>
     </div>
-    <button class="btn" style="padding: 10px 30px; background: var(--acc); color: #fff; border: none; cursor: pointer;" onclick="closeW()" data-key="w_b">Перейти</button>
-</div>
-
-
-<div class="controls">
-    <button class="c-btn" onclick="toggleL()">🌐</button>
-    <button class="c-btn" onclick="toggleT()" id="tBtn">☀️</button>
-</div>
-
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
+    <div class="container">
+      <header style="text-align: center; margin-bottom: 40px">
         <div class="logo-container">
-            <!-- Левая часть: G + S.HTTP -->
-            <div class="main-letter">G</div>
-            <div class="extra-text text-g">S.HTTP</div>
-            
-            <!-- Вертикальный разделитель -->
-            <div class="divider"></div>
-            
-            <!-- Правая часть: S + peed -->
-            <div class="main-letter">S</div>
-            <div class="extra-text text-s">peed</div>
+          <div class="main-letter">G</div>
+          <div class="extra-text text-g">S.HTTP</div>
+          <div class="divider"></div>
+          <div class="main-letter">S</div>
+          <div class="extra-text text-s">peed</div>
         </div>
-        <p style="opacity: 0.5; margin: 0;">by G. Smerdov</p>
-    </header>
-
-
-    <!-- Раздел с проектами -->
-    <section class="reveal">
+        <p style="opacity: 0.5; margin: 0">by G. Smerdov</p>
+      </header>
+      <section class="reveal">
         <h2 data-key="p_h">Мои проекты</h2>
         <div class="grid">
-<div class="card"> 
-    <span class="badge">Android</span> 
-    <h3>GS.HTTP</h3> 
-    <p style="font-size: 14px; opacity: 0.7;" data-key="p_d2">Анализ HTTP-трафика.</p>
-
-    <!-- Контейнер для двух кнопок сторов --> 
-    <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;"> 
-
-        <!-- КНОПКА RUSTORE (С динамическими цветами под любую тему) --> 
-        <a href="https://www.rustore.ru/catalog/app/com.flet.gshttp" target="_blank" rel="noopener noreferrer" 
-           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: currentColor; background-color: rgba(128, 128, 128, 0.08); border: 1px solid rgba(128, 128, 128, 0.2); padding: 8px 16px; height: 38px; border-radius: 10px; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;" 
-           onmouseover="this.style.backgroundColor='rgba(128, 128, 128, 0.15)'; this.style.borderColor='rgba(128, 128, 128, 0.4)';" 
-           onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.08)'; this.style.borderColor='rgba(128, 128, 128, 0.2)';" 
-           onmousedown="this.style.transform='translateY(1px)';" 
-           onmouseup="this.style.transform='none';"> 
-            <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 18px;"> 
-                <img src="images/rutore-logo.svg.png" alt="Логотип RuStore" style="width: 100%; height: 100%; object-fit: contain;"> 
-            </span> 
-            <span>RuStore</span> 
-        </a> 
-
-        <!-- КНОПКА RUMARKET (С динамическими цветами под любую тему) --> 
-        <a href="https://ruplay.market/apps/com.flet.gshttp" target="_blank" rel="noopener noreferrer" 
-           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: currentColor; background-color: rgba(128, 128, 128, 0.08); border: 1px solid rgba(128, 128, 128, 0.2); padding: 8px 16px; height: 38px; border-radius: 10px; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;" 
-           onmouseover="this.style.backgroundColor='rgba(128, 128, 128, 0.15)'; this.style.borderColor='rgba(128, 128, 128, 0.4)';" 
-           onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.08)'; this.style.borderColor='rgba(128, 128, 128, 0.2)';" 
-           onmousedown="this.style.transform='translateY(1px)';" 
-           onmouseup="this.style.transform='none';"> 
-            <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 18px;"> 
-                <svg viewBox="0 0 600 600" version="1.1" xmlns="http://w3.org" style="width: 100%; height: 100%;"> 
-                    <defs> 
-                        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="gradient-lite-card-v3"> 
-                            <stop stop-color="#FF4272" offset="0%"></stop> 
-                            <stop stop-color="#FF1D3C" offset="100%"></stop> 
-                        </linearGradient> 
-                    </defs> 
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> 
-                        <path d="M460.002882,599.95 L139.897118,599.95 C62.6046801,599.95 -0.05,537.291794 -0.05,460.002882 L-0.05,139.897118 C-0.05,62.6046801 62.6082055,-0.05 139.897118,-0.05 L460.002882,-0.05 C537.29532,-0.05 599.95,62.6082055 599.95,139.897118 L599.95,460.002882 C599.95,537.291794 537.291794,599.95 460.002882,599.95 Z" fill="url(#gradient-lite-card-v3)"></path> 
-                        <g transform="translate(100.100000, 155.970000)" fill="#FFFFFF" fill-rule="nonzero"> 
-                            <path d="M313.585816,1.12419979 C342.388231,1.12766954 371.194115,1.13113929 400,1.13460905 L400,192.661474 C400,192.661474 398.03959,225.898232 383.688694,245.700109 C379.80314,251.060024 375.177989,255.821734 374.167646,256.844004 L373.983425,257.029295 C373.97218,257.040512 373.966447,257.0462 373.966447,257.0462 C372.158706,258.843532 366.600163,264.211239 358.310925,269.537309 C348.300689,275.96676 337.91225,280.015961 327.176836,282.906265 C321.208862,284.50929 307.121667,287.909648 265.259104,288.008968 C250.668795,288.041498 240.034004,287.656356 232.171545,287.083847 C232.146801,281.749188 232.107942,273.061228 232.069134,264.213944 L232.057108,261.466656 C232.018462,252.620589 231.981334,243.945609 231.95989,238.635693 C231.940063,234.171279 231.908433,226.14663 231.877366,217.952072 L231.868076,215.491998 C231.837245,207.297361 231.808212,199.271848 231.793342,194.805781 C231.95989,192.109783 231.904374,187.234781 229.680262,181.77339 C229.253483,180.732465 227.522076,176.638157 223.625544,172.464045 C219.34734,167.866623 214.808903,165.750074 209.958189,163.453098 C207.085234,162.092955 203.674468,160.746691 198.59475,159.35879 C192.411651,157.665551 182.970455,155.687792 170.618136,155.347756 C176.239135,154.272133 201.925713,148.734408 218.129456,124.723721 C226.200101,112.763484 228.975903,100.584653 229.784355,90.9387415 C229.815583,119.345605 229.84681,147.752468 229.878038,176.155861 C229.964782,179.649902 230.714249,194.271439 242.03952,205.516906 C249.249666,212.671536 257.573602,215.329366 260.137749,216.054545 C265.509941,217.57108 269.802197,217.67412 271.290739,217.678244 L272.066758,217.678389 C294.998352,217.678389 313.585816,199.087455 313.585816,176.159331 L313.585816,1.12419979 Z M161.270623,0.0728648011 C170.035218,0.24288267 178.896966,0.357384501 187.862806,0.409430787 C202.054093,0.492704846 215.995559,0.419840044 229.683732,0.211654898 C229.71149,25.4020576 229.739248,50.5889905 229.767006,75.7793931 C229.263892,68.3610624 226.918339,44.0519769 207.036658,23.6116653 C189.590743,5.68345449 168.921427,1.28727815 161.270623,0.0728648011 Z" opacity="0.8"></path> 
-                            <path d="M143.456914,0 L143.456914,195.499731 C143.526309,202.116549 144.261897,213.580611 148.602557,226.366649 C148.151489,225.37083 147.610208,224.312555 146.954425,223.229993 C146.145972,221.894138 144.6401,219.649208 141.704689,216.807481 C135.702018,211.002585 129.158065,207.980431 127.433598,207.203206 L127.177268,207.088959 L127.177268,207.088959 L126.663833,206.864762 C121.263639,204.540322 115.498438,203.13918 102.03501,201.734876 C94.2974619,200.926424 84.203952,200.13532 72.2645339,199.906317 C72.4900678,229.024479 72.7190715,258.135702 72.9480752,287.250395 L0,287.142832 L0,287.142832 L0,0 L143.456914,0 Z M157.495533,0 C158.751583,0.0277580195 160.011103,0.0520462865 161.274093,0.0763345535 C168.924897,1.28727815 189.594212,5.68692424 207.036658,23.6151351 C226.009264,43.1186135 229.01407,66.1473604 229.687202,74.6586631 L229.687202,92.0213043 C228.764248,101.486789 225.905172,113.207613 218.132926,124.723721 C201.929182,148.734408 176.246075,154.272133 170.621606,155.347756 C182.973925,155.687792 192.418591,157.665551 198.59822,159.35879 C203.677938,160.746691 207.088704,162.092955 209.961659,163.453098 C214.812373,165.746604 219.350809,167.866623 223.629014,172.464045 C227.522076,176.638157 229.256953,180.732465 229.683732,181.77339 C231.907843,187.238251 231.963359,192.109783 231.796811,194.805781 C231.831509,204.184521 231.925192,229.260422 231.963359,238.635693 C231.982471,243.764101 232.016936,252.028039 232.053665,260.553685 L232.061566,262.383568 L232.061566,262.383568 L232.069507,264.215178 C232.107942,273.062012 232.146801,281.749188 232.171545,287.083847 C219.031592,286.119255 213.622248,284.627262 210.423136,283.652261 C192.633716,278.253327 182.005864,270.49843 178.366094,267.6914 C173.470273,263.91631 166.444024,257.705453 160.160303,248.958207 C155.746777,242.809806 152.48868,236.508735 150.091081,230.41932 C149.761455,229.267362 149.289568,227.882931 148.606027,226.366649 C144.261897,213.580611 143.529779,202.116549 143.460384,195.499731 L143.460384,0 L157.495533,0 Z M148.602557,226.370118 C149.286098,227.8864 149.761455,229.270832 150.087611,230.422789 C149.5498,229.059177 149.057095,227.705973 148.602557,226.370118 Z M174.625514,83.8852649 L81.4082982,37.852072 C76.1336615,35.2627049 69.9,39.0988043 69.9,45.0447584 L69.9,137.015242 C69.9,142.961196 76.1336615,146.797295 81.4082982,144.207928 L174.625514,98.1747351 C180.571468,95.2976606 180.571468,86.7623394 174.625514,83.8852649 Z"></path> 
-                        </g> 
-                    </g> 
-                </svg> 
-            </span> 
-            <span>RuMarket</span> 
-        </a> 
-    </div> 
-</div>
-
-<div class="card"> 
-    <span class="badge">Android</span> 
-    <h3>GS.HTTP Lite</h3> 
-    <!-- Описание исправлено на строгое «Анализ HTTP-трафика.» -->
-    <p style="font-size: 14px; opacity: 0.7;" data-key="p_d0">Лёгкий анализ HTTP-трафика.</p> 
-
-    <!-- Контейнер для двух кнопок сторов --> 
-    <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;"> 
-
-        <!-- КНОПКА RUSTORE (С динамическими цветами под любую тему) --> 
-        <a href="https://www.rustore.ru/catalog/app/com.georgiy.smerdov.gshttp" target="_blank" rel="noopener noreferrer" 
-           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: currentColor; background-color: rgba(128, 128, 128, 0.08); border: 1px solid rgba(128, 128, 128, 0.2); padding: 8px 16px; height: 38px; border-radius: 10px; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;" 
-           onmouseover="this.style.backgroundColor='rgba(128, 128, 128, 0.15)'; this.style.borderColor='rgba(128, 128, 128, 0.4)';" 
-           onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.08)'; this.style.borderColor='rgba(128, 128, 128, 0.2)';" 
-           onmousedown="this.style.transform='translateY(1px)';" 
-           onmouseup="this.style.transform='none';"> 
-            <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 18px;"> 
-                <!-- Ваша PNG картинка --> 
-                <img src="images/rutore-logo.svg.png" alt="Логотип RuStore" style="width: 100%; height: 100%; object-fit: contain;"> 
-            </span> 
-            <span>RuStore</span> 
-        </a> 
-
-        <!-- КНОПКА RUMARKET (С динамическими цветами под любую тему) --> 
-        <a href="https://ruplay.market/apps/com.georgiy.smerdov.gshttp" target="_blank" rel="noopener noreferrer" 
-           style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: currentColor; background-color: rgba(128, 128, 128, 0.08); border: 1px solid rgba(128, 128, 128, 0.2); padding: 8px 16px; height: 38px; border-radius: 10px; font-family: system-ui, sans-serif; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;" 
-           onmouseover="this.style.backgroundColor='rgba(128, 128, 128, 0.15)'; this.style.borderColor='rgba(128, 128, 128, 0.4)';" 
-           onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.08)'; this.style.borderColor='rgba(128, 128, 128, 0.2)';" 
-           onmousedown="this.style.transform='translateY(1px)';" 
-           onmouseup="this.style.transform='none';"> 
-            <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 18px;"> 
-                <!-- Встроенный векторный логотип RuMarket --> 
-                <svg viewBox="0 0 600 600" version="1.1" xmlns="http://w3.org" style="width: 100%; height: 100%;"> 
-                    <defs> 
-                        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="gradient-lite-card-v4"> 
-                            <stop stop-color="#FF4272" offset="0%"></stop> 
-                            <stop stop-color="#FF1D3C" offset="100%"></stop> 
-                        </linearGradient> 
-                    </defs> 
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> 
-                        <path d="M460.002882,599.95 L139.897118,599.95 C62.6046801,599.95 -0.05,537.291794 -0.05,460.002882 L-0.05,139.897118 C-0.05,62.6046801 62.6082055,-0.05 139.897118,-0.05 L460.002882,-0.05 C537.29532,-0.05 599.95,62.6082055 599.95,139.897118 L599.95,460.002882 C599.95,537.291794 537.291794,599.95 460.002882,599.95 Z" fill="url(#gradient-lite-card-v4)"></path> 
-                        <g transform="translate(100.100000, 155.970000)" fill="#FFFFFF" fill-rule="nonzero"> 
-                            <path d="M313.585816,1.12419979 C342.388231,1.12766954 371.194115,1.13113929 400,1.13460905 L400,192.661474 C400,192.661474 398.03959,225.898232 383.688694,245.700109 C379.80314,251.060024 375.177989,255.821734 374.167646,256.844004 L373.983425,257.029295 C373.97218,257.040512 373.966447,257.0462 373.966447,257.0462 C372.158706,258.843532 366.600163,264.211239 358.310925,269.537309 C348.300689,275.96676 337.91225,280.015961 327.176836,282.906265 C321.208862,284.50929 307.121667,287.909648 265.259104,288.008968 C250.668795,288.041498 240.034004,287.656356 232.171545,287.083847 C232.146801,281.749188 232.107942,273.061228 232.069134,264.213944 L232.057108,261.466656 C232.018462,252.620589 231.981334,243.945609 231.95989,238.635693 C231.940063,234.171279 231.908433,226.14663 231.877366,217.952072 L231.868076,215.491998 C231.837245,207.297361 231.808212,199.271848 231.793342,194.805781 C231.95989,192.109783 231.904374,187.234781 229.680262,181.77339 C229.253483,180.732465 227.522076,176.638157 223.625544,172.464045 C219.34734,167.866623 214.808903,165.750074 209.958189,163.453098 C207.085234,162.092955 203.674468,160.746691 198.59475,159.35879 C192.411651,157.665551 182.970455,155.687792 170.618136,155.347756 C176.239135,154.272133 201.925713,148.734408 218.129456,124.723721 C226.200101,112.763484 228.975903,100.584653 229.784355,90.9387415 C229.815583,119.345605 229.84681,147.752468 229.878038,176.155861 C229.964782,179.649902 230.714249,194.271439 242.03952,205.516906 C249.249666,212.671536 257.573602,215.329366 260.137749,216.054545 C265.509941,217.57108 269.802197,217.67412 271.290739,217.678244 L272.066758,217.678389 C294.998352,217.678389 313.585816,199.087455 313.585816,176.159331 L313.585816,1.12419979 Z M161.270623,0.0728648011 C170.035218,0.24288267 178.896966,0.357384501 187.862806,0.409430787 C202.054093,0.492704846 215.995559,0.419840044 229.683732,0.211654898 C229.71149,25.4020576 229.739248,50.5889905 229.767006,75.7793931 C229.263892,68.3610624 226.918339,44.0519769 207.036658,23.6116653 C189.590743,5.68345449 168.921427,1.28727815 161.270623,0.0728648011 Z" opacity="0.8"></path> 
-                            <path d="M143.456914,0 L143.456914,195.499731 C143.526309,202.116549 144.261897,213.580611 148.602557,226.366649 C148.151489,225.37083 147.610208,224.312555 146.954425,223.229993 C146.145972,221.894138 144.6401,219.649208 141.704689,216.807481 C135.702018,211.002585 129.158065,207.980431 127.433598,207.203206 L127.177268,207.088959 L127.177268,207.088959 L126.663833,206.864762 C121.263639,204.540322 115.498438,203.13918 102.03501,201.734876 C94.2974619,200.926424 84.203952,200.13532 72.2645339,199.906317 C72.4900678,229.024479 72.7190715,258.135702 72.9480752,287.250395 L0,287.142832 L0,287.142832 L0,0 L143.456914,0 Z M157.495533,0 C158.751583,0.0277580195 160.011103,0.0520462865 161.274093,0.0763345535 C168.924897,1.28727815 189.594212,5.68692424 207.036658,23.6151351 C226.009264,43.1186135 229.01407,66.1473604 229.687202,74.6586631 L229.687202,92.0213043 C228.764248,101.486789 225.905172,113.207613 218.132926,124.723721 C201.929182,148.734408 176.246075,154.272133 170.621606,155.347756 C182.973925,155.687792 192.418591,157.665551 198.59822,159.35879 C203.677938,160.746691 207.088704,162.092955 209.961659,163.453098 C214.812373,165.746604 219.350809,167.866623 223.629014,172.464045 C227.522076,176.638157 229.256953,180.732465 229.683732,181.77339 C231.907843,187.238251 231.963359,192.109783 231.796811,194.805781 C231.831509,204.184521 231.925192,229.260422 231.963359,238.635693 C231.982471,243.764101 232.016936,252.028039 232.053665,260.553685 L232.061566,262.383568 L232.061566,262.383568 L232.069507,264.215178 C232.107942,273.062012 232.146801,281.749188 232.171545,287.083847 C219.031592,286.119255 213.622248,284.627262 210.423136,283.652261 C192.633716,278.253327 182.005864,270.49843 178.366094,267.6914 C173.470273,263.91631 166.444024,257.705453 160.160303,248.958207 C155.746777,242.809806 152.48868,236.508735 150.091081,230.41932 C149.761455,229.267362 149.289568,227.882931 148.606027,226.366649 C144.261897,213.580611 143.529779,202.116549 143.460384,195.499731 L143.460384,0 L157.495533,0 Z M148.602557,226.370118 C149.286098,227.8864 149.761455,229.270832 150.087611,230.422789 C149.5498,229.059177 149.057095,227.705973 148.602557,226.370118 Z M174.625514,83.8852649 L81.4082982,37.852072 C76.1336615,35.2627049 69.9,39.0988043 69.9,45.0447584 L69.9,137.015242 C69.9,142.961196 76.1336615,146.797295 81.4082982,144.207928 L174.625514,98.1747351 C180.571468,95.2976606 180.571468,86.7623394 174.625514,83.8852649 Z"></path> 
-                        </g> 
-                    </g> 
-                </svg> 
-            </span> 
-            <span>RuMarket</span> 
-        </a> 
-    </div> 
-</div>
-<div class="card">
-    <span class="badge">Windows</span>
-    <h3>GS.Monitor</h3>
-    <p style="font-size: 14px;" data-key="p_dev">Мощный инструмент анализа HTTP-трафикана ПК</p>
-    
-    <!-- ВСТАВЛЕННЫЙ БЛОК GITHUB -->
-    <!-- Замените ССЫЛКУ и путь к ЛОГОТИПУ на свои -->
-        <a href="https://github.com/g60373250-wq/GS.Monitor/releases/tag/v1.0.0" target="_blank" class="main-link-block">
-            <img src="images/logo.png" alt="Логотип" class="logo">
-            <span class="github-text">GitHub</span>
-        </a>
-    </div>
-</div>
-</section>
-
-<!-- Раздел с новостями -->
-<section style="margin-top: 50px; text-align: center;" class="reveal">
-    <h2 data-key="n_h">Новости</h2>
-    
-    <!-- ВМЕСТО СТАРОГО КОДА С DETAILS ВСТАВЬТЕ ТОЛЬКО ЭТОТ КОНТЕЙНЕР -->
-    <ul class="news-list" id="news-container"></ul>
-    
-    <a href="news.html" class="more-btn" data-key="n_m" target="_blank">Смотреть все новости</a>
-</section>
-
-<!-- Раздел: Дизайн проектов -->
-<section style="margin-top: 70px; text-align: center; padding: 20px 0;" class="reveal">
-    <h2 data-key="p_d_title">Дизайн проектов</h2>
-    
-    <div class="slider-window">
-        <!-- Левая стрелка -->
-        <button class="nav-btn prev-btn" id="prevBtn" aria-label="Назад" type="button">
-            <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
-        </button>
-
-        <!-- Окно просмотра -->
-        <div class="slider-viewport" id="viewport">
-            <div class="slider-track">
-                <div class="phone-card active" id="slide0"><img src="images/screenshot1.png" alt="Экран 1"></div>
-                <div class="phone-card" id="slide1"><img src="images/screenshot2.png" alt="Экран 2"></div>
-                <div class="phone-card" id="slide2"><img src="images/screenshot3.png" alt="Экран 3"></div>
-                <div class="phone-card" id="slide3"><img src="images/screenshot4.png" alt="Экран 4"></div>
-                <div class="phone-card" id="slide4"><img src="images/screenshot5.png" alt="Экран 5"></div>
-                <div class="phone-card" id="slide5"><img src="images/screenshot6.png" alt="Экран 6"></div>
+          <div class="card">
+            <span class="badge">Android</span>
+            <h3>GS.HTTP</h3>
+            <p style="font-size: 14px; opacity: 0.7" data-key="p_d2">
+              Анализ HTTP-трафика.
+            </p>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                margin-top: 14px;
+                flex-wrap: wrap;
+              "
+            >
+              <a
+                href="https://www.rustore.ru/catalog/app/com.flet.gshttp"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  color: currentColor;
+                  background-color: rgba(128, 128, 128, 0.08);
+                  border: 1px solid rgba(128, 128, 128, 0.2);
+                  padding: 8px 16px;
+                  height: 38px;
+                  border-radius: 10px;
+                  font-family: system-ui, sans-serif;
+                  font-size: 13px;
+                  font-weight: 600;
+                  text-decoration: none;
+                  transition: all 0.2s ease;
+                "
+                onmouseover="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.15)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.4)';
+                "
+                onmouseout="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.08)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.2)';
+                "
+                onmousedown="this.style.transform = 'translateY(1px)'"
+                onmouseup="this.style.transform = 'none'"
+              >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 18px;
+                    height: 18px;
+                  "
+                >
+                  <img
+                    src="images/rutore-logo.svg.png"
+                    alt="Логотип RuStore"
+                    style="width: 100%; height: 100%; object-fit: contain"
+                  />
+                </span>
+                <span>RuStore</span>
+              </a>
+              <a
+                href="https://ruplay.market/apps/com.flet.gshttp"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  color: currentColor;
+                  background-color: rgba(128, 128, 128, 0.08);
+                  border: 1px solid rgba(128, 128, 128, 0.2);
+                  padding: 8px 16px;
+                  height: 38px;
+                  border-radius: 10px;
+                  font-family: system-ui, sans-serif;
+                  font-size: 13px;
+                  font-weight: 600;
+                  text-decoration: none;
+                  transition: all 0.2s ease;
+                "
+                onmouseover="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.15)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.4)';
+                "
+                onmouseout="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.08)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.2)';
+                "
+                onmousedown="this.style.transform = 'translateY(1px)'"
+                onmouseup="this.style.transform = 'none'"
+              >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 18px;
+                    height: 18px;
+                  "
+                >
+                  <svg
+                    viewBox="0 0 600 600"
+                    version="1.1"
+                    xmlns="http://w3.org"
+                    style="width: 100%; height: 100%"
+                  >
+                    <defs>
+                      <linearGradient
+                        x1="50%"
+                        y1="0%"
+                        x2="50%"
+                        y2="100%"
+                        id="gradient-lite-card-v3"
+                      >
+                        <stop stop-color="#FF4272" offset="0%"></stop>
+                        <stop stop-color="#FF1D3C" offset="100%"></stop>
+                      </linearGradient>
+                    </defs>
+                    <g
+                      stroke="none"
+                      stroke-width="1"
+                      fill="none"
+                      fill-rule="evenodd"
+                    >
+                      <path
+                        d="M460.002882,599.95 L139.897118,599.95 C62.6046801,599.95 -0.05,537.291794 -0.05,460.002882 L-0.05,139.897118 C-0.05,62.6046801 62.6082055,-0.05 139.897118,-0.05 L460.002882,-0.05 C537.29532,-0.05 599.95,62.6082055 599.95,139.897118 L599.95,460.002882 C599.95,537.291794 537.291794,599.95 460.002882,599.95 Z"
+                        fill="url(#gradient-lite-card-v3)"
+                      ></path>
+                      <g
+                        transform="translate(100.100000, 155.970000)"
+                        fill="#FFFFFF"
+                        fill-rule="nonzero"
+                      >
+                        <path
+                          d="M313.585816,1.12419979 C342.388231,1.12766954 371.194115,1.13113929 400,1.13460905 L400,192.661474 C400,192.661474 398.03959,225.898232 383.688694,245.700109 C379.80314,251.060024 375.177989,255.821734 374.167646,256.844004 L373.983425,257.029295 C373.97218,257.040512 373.966447,257.0462 373.966447,257.0462 C372.158706,258.843532 366.600163,264.211239 358.310925,269.537309 C348.300689,275.96676 337.91225,280.015961 327.176836,282.906265 C321.208862,284.50929 307.121667,287.909648 265.259104,288.008968 C250.668795,288.041498 240.034004,287.656356 232.171545,287.083847 C232.146801,281.749188 232.107942,273.061228 232.069134,264.213944 L232.057108,261.466656 C232.018462,252.620589 231.981334,243.945609 231.95989,238.635693 C231.940063,234.171279 231.908433,226.14663 231.877366,217.952072 L231.868076,215.491998 C231.837245,207.297361 231.808212,199.271848 231.793342,194.805781 C231.95989,192.109783 231.904374,187.234781 229.680262,181.77339 C229.253483,180.732465 227.522076,176.638157 223.625544,172.464045 C219.34734,167.866623 214.808903,165.750074 209.958189,163.453098 C207.085234,162.092955 203.674468,160.746691 198.59475,159.35879 C192.411651,157.665551 182.970455,155.687792 170.618136,155.347756 C176.239135,154.272133 201.925713,148.734408 218.129456,124.723721 C226.200101,112.763484 228.975903,100.584653 229.784355,90.9387415 C229.815583,119.345605 229.84681,147.752468 229.878038,176.155861 C229.964782,179.649902 230.714249,194.271439 242.03952,205.516906 C249.249666,212.671536 257.573602,215.329366 260.137749,216.054545 C265.509941,217.57108 269.802197,217.67412 271.290739,217.678244 L272.066758,217.678389 C294.998352,217.678389 313.585816,199.087455 313.585816,176.159331 L313.585816,1.12419979 Z M161.270623,0.0728648011 C170.035218,0.24288267 178.896966,0.357384501 187.862806,0.409430787 C202.054093,0.492704846 215.995559,0.419840044 229.683732,0.211654898 C229.71149,25.4020576 229.739248,50.5889905 229.767006,75.7793931 C229.263892,68.3610624 226.918339,44.0519769 207.036658,23.6116653 C189.590743,5.68345449 168.921427,1.28727815 161.270623,0.0728648011 Z"
+                          opacity="0.8"
+                        ></path>
+                        <path
+                          d="M143.456914,0 L143.456914,195.499731 C143.526309,202.116549 144.261897,213.580611 148.602557,226.366649 C148.151489,225.37083 147.610208,224.312555 146.954425,223.229993 C146.145972,221.894138 144.6401,219.649208 141.704689,216.807481 C135.702018,211.002585 129.158065,207.980431 127.433598,207.203206 L127.177268,207.088959 L127.177268,207.088959 L126.663833,206.864762 C121.263639,204.540322 115.498438,203.13918 102.03501,201.734876 C94.2974619,200.926424 84.203952,200.13532 72.2645339,199.906317 C72.4900678,229.024479 72.7190715,258.135702 72.9480752,287.250395 L0,287.142832 L0,287.142832 L0,0 L143.456914,0 Z M157.495533,0 C158.751583,0.0277580195 160.011103,0.0520462865 161.274093,0.0763345535 C168.924897,1.28727815 189.594212,5.68692424 207.036658,23.6151351 C226.009264,43.1186135 229.01407,66.1473604 229.687202,74.6586631 L229.687202,92.0213043 C228.764248,101.486789 225.905172,113.207613 218.132926,124.723721 C201.929182,148.734408 176.246075,154.272133 170.621606,155.347756 C182.973925,155.687792 192.418591,157.665551 198.59822,159.35879 C203.677938,160.746691 207.088704,162.092955 209.961659,163.453098 C214.812373,165.746604 219.350809,167.866623 223.629014,172.464045 C227.522076,176.638157 229.256953,180.732465 229.683732,181.77339 C231.907843,187.238251 231.963359,192.109783 231.796811,194.805781 C231.831509,204.184521 231.925192,229.260422 231.963359,238.635693 C231.982471,243.764101 232.016936,252.028039 232.053665,260.553685 L232.061566,262.383568 L232.061566,262.383568 L232.069507,264.215178 C232.107942,273.062012 232.146801,281.749188 232.171545,287.083847 C219.031592,286.119255 213.622248,284.627262 210.423136,283.652261 C192.633716,278.253327 182.005864,270.49843 178.366094,267.6914 C173.470273,263.91631 166.444024,257.705453 160.160303,248.958207 C155.746777,242.809806 152.48868,236.508735 150.091081,230.41932 C149.761455,229.267362 149.289568,227.882931 148.606027,226.366649 C144.261897,213.580611 143.529779,202.116549 143.460384,195.499731 L143.460384,0 L157.495533,0 Z M148.602557,226.370118 C149.286098,227.8864 149.761455,229.270832 150.087611,230.422789 C149.5498,229.059177 149.057095,227.705973 148.602557,226.370118 Z M174.625514,83.8852649 L81.4082982,37.852072 C76.1336615,35.2627049 69.9,39.0988043 69.9,45.0447584 L69.9,137.015242 C69.9,142.961196 76.1336615,146.797295 81.4082982,144.207928 L174.625514,98.1747351 C180.571468,95.2976606 180.571468,86.7623394 174.625514,83.8852649 Z"
+                        ></path>
+                      </g>
+                    </g>
+                  </svg>
+                </span>
+                <span>RuMarket</span>
+              </a>
             </div>
+          </div>
+          <div class="card">
+            <span class="badge">Android</span>
+            <h3>GS.HTTP Lite</h3>
+            <p style="font-size: 14px; opacity: 0.7" data-key="p_d0">
+              Лёгкий анализ HTTP-трафика.
+            </p>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                margin-top: 14px;
+                flex-wrap: wrap;
+              "
+            >
+              <a
+                href="https://www.rustore.ru/catalog/app/com.georgiy.smerdov.gshttp"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  color: currentColor;
+                  background-color: rgba(128, 128, 128, 0.08);
+                  border: 1px solid rgba(128, 128, 128, 0.2);
+                  padding: 8px 16px;
+                  height: 38px;
+                  border-radius: 10px;
+                  font-family: system-ui, sans-serif;
+                  font-size: 13px;
+                  font-weight: 600;
+                  text-decoration: none;
+                  transition: all 0.2s ease;
+                "
+                onmouseover="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.15)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.4)';
+                "
+                onmouseout="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.08)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.2)';
+                "
+                onmousedown="this.style.transform = 'translateY(1px)'"
+                onmouseup="this.style.transform = 'none'"
+              >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 18px;
+                    height: 18px;
+                  "
+                >
+                  <img
+                    src="images/rutore-logo.svg.png"
+                    alt="Логотип RuStore"
+                    style="width: 100%; height: 100%; object-fit: contain"
+                  />
+                </span>
+                <span>RuStore</span>
+              </a>
+              <a
+                href="https://ruplay.market/apps/com.georgiy.smerdov.gshttp"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  color: currentColor;
+                  background-color: rgba(128, 128, 128, 0.08);
+                  border: 1px solid rgba(128, 128, 128, 0.2);
+                  padding: 8px 16px;
+                  height: 38px;
+                  border-radius: 10px;
+                  font-family: system-ui, sans-serif;
+                  font-size: 13px;
+                  font-weight: 600;
+                  text-decoration: none;
+                  transition: all 0.2s ease;
+                "
+                onmouseover="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.15)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.4)';
+                "
+                onmouseout="
+                  this.style.backgroundColor = 'rgba(128, 128, 128, 0.08)';
+                  this.style.borderColor = 'rgba(128, 128, 128, 0.2)';
+                "
+                onmousedown="this.style.transform = 'translateY(1px)'"
+                onmouseup="this.style.transform = 'none'"
+              >
+                <span
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 18px;
+                    height: 18px;
+                  "
+                >
+                  <svg
+                    viewBox="0 0 600 600"
+                    version="1.1"
+                    xmlns="http://w3.org"
+                    style="width: 100%; height: 100%"
+                  >
+                    <defs>
+                      <linearGradient
+                        x1="50%"
+                        y1="0%"
+                        x2="50%"
+                        y2="100%"
+                        id="gradient-lite-card-v4"
+                      >
+                        <stop stop-color="#FF4272" offset="0%"></stop>
+                        <stop stop-color="#FF1D3C" offset="100%"></stop>
+                      </linearGradient>
+                    </defs>
+                    <g
+                      stroke="none"
+                      stroke-width="1"
+                      fill="none"
+                      fill-rule="evenodd"
+                    >
+                      <path
+                        d="M460.002882,599.95 L139.897118,599.95 C62.6046801,599.95 -0.05,537.291794 -0.05,460.002882 L-0.05,139.897118 C-0.05,62.6046801 62.6082055,-0.05 139.897118,-0.05 L460.002882,-0.05 C537.29532,-0.05 599.95,62.6082055 599.95,139.897118 L599.95,460.002882 C599.95,537.291794 537.291794,599.95 460.002882,599.95 Z"
+                        fill="url(#gradient-lite-card-v4)"
+                      ></path>
+                      <g
+                        transform="translate(100.100000, 155.970000)"
+                        fill="#FFFFFF"
+                        fill-rule="nonzero"
+                      >
+                        <path
+                          d="M313.585816,1.12419979 C342.388231,1.12766954 371.194115,1.13113929 400,1.13460905 L400,192.661474 C400,192.661474 398.03959,225.898232 383.688694,245.700109 C379.80314,251.060024 375.177989,255.821734 374.167646,256.844004 L373.983425,257.029295 C373.97218,257.040512 373.966447,257.0462 373.966447,257.0462 C372.158706,258.843532 366.600163,264.211239 358.310925,269.537309 C348.300689,275.96676 337.91225,280.015961 327.176836,282.906265 C321.208862,284.50929 307.121667,287.909648 265.259104,288.008968 C250.668795,288.041498 240.034004,287.656356 232.171545,287.083847 C232.146801,281.749188 232.107942,273.061228 232.069134,264.213944 L232.057108,261.466656 C232.018462,252.620589 231.981334,243.945609 231.95989,238.635693 C231.940063,234.171279 231.908433,226.14663 231.877366,217.952072 L231.868076,215.491998 C231.837245,207.297361 231.808212,199.271848 231.793342,194.805781 C231.95989,192.109783 231.904374,187.234781 229.680262,181.77339 C229.253483,180.732465 227.522076,176.638157 223.625544,172.464045 C219.34734,167.866623 214.808903,165.750074 209.958189,163.453098 C207.085234,162.092955 203.674468,160.746691 198.59475,159.35879 C192.411651,157.665551 182.970455,155.687792 170.618136,155.347756 C176.239135,154.272133 201.925713,148.734408 218.129456,124.723721 C226.200101,112.763484 228.975903,100.584653 229.784355,90.9387415 C229.815583,119.345605 229.84681,147.752468 229.878038,176.155861 C229.964782,179.649902 230.714249,194.271439 242.03952,205.516906 C249.249666,212.671536 257.573602,215.329366 260.137749,216.054545 C265.509941,217.57108 269.802197,217.67412 271.290739,217.678244 L272.066758,217.678389 C294.998352,217.678389 313.585816,199.087455 313.585816,176.159331 L313.585816,1.12419979 Z M161.270623,0.0728648011 C170.035218,0.24288267 178.896966,0.357384501 187.862806,0.409430787 C202.054093,0.492704846 215.995559,0.419840044 229.683732,0.211654898 C229.71149,25.4020576 229.739248,50.5889905 229.767006,75.7793931 C229.263892,68.3610624 226.918339,44.0519769 207.036658,23.6116653 C189.590743,5.68345449 168.921427,1.28727815 161.270623,0.0728648011 Z"
+                          opacity="0.8"
+                        ></path>
+                        <path
+                          d="M143.456914,0 L143.456914,195.499731 C143.526309,202.116549 144.261897,213.580611 148.602557,226.366649 C148.151489,225.37083 147.610208,224.312555 146.954425,223.229993 C146.145972,221.894138 144.6401,219.649208 141.704689,216.807481 C135.702018,211.002585 129.158065,207.980431 127.433598,207.203206 L127.177268,207.088959 L127.177268,207.088959 L126.663833,206.864762 C121.263639,204.540322 115.498438,203.13918 102.03501,201.734876 C94.2974619,200.926424 84.203952,200.13532 72.2645339,199.906317 C72.4900678,229.024479 72.7190715,258.135702 72.9480752,287.250395 L0,287.142832 L0,287.142832 L0,0 L143.456914,0 Z M157.495533,0 C158.751583,0.0277580195 160.011103,0.0520462865 161.274093,0.0763345535 C168.924897,1.28727815 189.594212,5.68692424 207.036658,23.6151351 C226.009264,43.1186135 229.01407,66.1473604 229.687202,74.6586631 L229.687202,92.0213043 C228.764248,101.486789 225.905172,113.207613 218.132926,124.723721 C201.929182,148.734408 176.246075,154.272133 170.621606,155.347756 C182.973925,155.687792 192.418591,157.665551 198.59822,159.35879 C203.677938,160.746691 207.088704,162.092955 209.961659,163.453098 C214.812373,165.746604 219.350809,167.866623 223.629014,172.464045 C227.522076,176.638157 229.256953,180.732465 229.683732,181.77339 C231.907843,187.238251 231.963359,192.109783 231.796811,194.805781 C231.831509,204.184521 231.925192,229.260422 231.963359,238.635693 C231.982471,243.764101 232.016936,252.028039 232.053665,260.553685 L232.061566,262.383568 L232.061566,262.383568 L232.069507,264.215178 C232.107942,273.062012 232.146801,281.749188 232.171545,287.083847 C219.031592,286.119255 213.622248,284.627262 210.423136,283.652261 C192.633716,278.253327 182.005864,270.49843 178.366094,267.6914 C173.470273,263.91631 166.444024,257.705453 160.160303,248.958207 C155.746777,242.809806 152.48868,236.508735 150.091081,230.41932 C149.761455,229.267362 149.289568,227.882931 148.606027,226.366649 C144.261897,213.580611 143.529779,202.116549 143.460384,195.499731 L143.460384,0 L157.495533,0 Z M148.602557,226.370118 C149.286098,227.8864 149.761455,229.270832 150.087611,230.422789 C149.5498,229.059177 149.057095,227.705973 148.602557,226.370118 Z M174.625514,83.8852649 L81.4082982,37.852072 C76.1336615,35.2627049 69.9,39.0988043 69.9,45.0447584 L69.9,137.015242 C69.9,142.961196 76.1336615,146.797295 81.4082982,144.207928 L174.625514,98.1747351 C180.571468,95.2976606 180.571468,86.7623394 174.625514,83.8852649 Z"
+                        ></path>
+                      </g>
+                    </g>
+                  </svg>
+                </span>
+                <span>RuMarket</span>
+              </a>
+            </div>
+          </div>
+          <div class="card">
+            <span class="badge">Windows</span>
+            <h3>GS.Monitor</h3>
+            <p style="font-size: 14px" data-key="p_dev">
+              Мощный инструмент анализа HTTP-трафикана ПК
+            </p>
+            <a
+              href="https://github.com/g60373250-wq/GS.Monitor/releases/tag/v1.0.0"
+              target="_blank"
+              class="main-link-block"
+            >
+              <img src="images/logo.png" alt="Логотип" class="logo" />
+              <span class="github-text">GitHub</span>
+            </a>
+          </div>
         </div>
+      </section>
+      <section style="margin-top: 50px; text-align: center" class="reveal">
+        <h2 data-key="n_h">Новости</h2>
 
-        <!-- Правая стрелка -->
-        <button class="nav-btn next-btn" id="nextBtn" aria-label="Вперед" type="button">
-            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41L10 6l6 6-6 6-1.41-1.41z"/></svg>
-        </button>
-    </div>
+        <ul class="news-list" id="news-container"></ul>
 
-    <!-- Интерактивное описание экрана -->
-    <div class="slider-description" id="sliderDesc">
-        Интерактивное представление нового дизайна приложения GS.HTTP.Lie
-    </div>
-
-    <!-- Точки пагинации -->
-    <div class="dots-container">
-        <div class="dot active" id="dot0"></div>
-        <div class="dot" id="dot1"></div>
-        <div class="dot" id="dot2"></div>
-        <div class="dot" id="dot3"></div>
-        <div class="dot" id="dot4"></div>
-        <div class="dot" id="dot5"></div>
-    </div>
-</section>	
-
-
-    <!-- Раздел Контакты и Поддержка -->
-    <section style="margin-top: 50px; text-align: center;" class="reveal">
+        <a href="news.html" class="more-btn" data-key="n_m" target="_blank"
+          >Смотреть все новости</a
+        >
+      </section>
+      <section
+        style="
+          margin-top: 70px;
+          text-align: center;
+          padding: 20px 0;
+          position: relative;
+        "
+        class="reveal"
+      >
+        <h2 data-key="p_design">Дизайн проектов</h2>
+        <div class="slider-window">
+          <button
+            class="nav-btn prev-btn"
+            id="prevBtn"
+            aria-label="Назад"
+            type="button"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+              />
+            </svg>
+          </button>
+          <div class="slider-viewport">
+            <div class="slider-track" id="track">
+              <div class="phone-card active" id="slide0">
+                <img src="images/screenshot1.png" alt="Экран 1" />
+              </div>
+              <div class="phone-card" id="slide1">
+                <img src="images/screenshot2.png" alt="Экран 2" />
+              </div>
+              <div class="phone-card" id="slide2">
+                <img src="images/screenshot3.png" alt="Экран 3" />
+              </div>
+              <div class="phone-card" id="slide3">
+                <img src="images/screenshot4.png" alt="Экран 4" />
+              </div>
+              <div class="phone-card" id="slide4">
+                <img src="images/screenshot5.png" alt="Экран 5" />
+              </div>
+              <div class="phone-card" id="slide5">
+                <img src="images/screenshot6.png" alt="Экран 6" />
+              </div>
+            </div>
+          </div>
+          <button
+            class="nav-btn next-btn"
+            id="nextBtn"
+            aria-label="Вперед"
+            type="button"
+          >
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M8.59 16.59L13.17 12 8.59 7.41L10 6l6 6-6 6-1.41-1.41z"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="slider-description" id="descBlock">
+          Интерактивное представление нового дизайна приложения GS.HTTP.Lite
+        </div>
+        <div class="dots-container">
+          <div class="dot active" id="dot0"></div>
+          <div class="dot" id="dot1"></div>
+          <div class="dot" id="dot2"></div>
+          <div class="dot" id="dot3"></div>
+          <div class="dot" id="dot4"></div>
+          <div class="dot" id="dot5"></div>
+        </div>
+      </section>
+      <section style="margin-top: 50px; text-align: center" class="reveal">
         <h2 data-key="c_h">Контакты и поддержка</h2>
         <div class="contacts-grid">
-        <a href="https://t.me/GS_smerdov" target="_blank" class="contact-link">
-        	<span><img src="images/telegram.png" alt="Telegram" style="height: 20px; width: auto; vertical-align: middle; margin-right: 5px;"></span> <span data-key="c_tg">Telegram-канал</span>
-        </a>
-            <!-- Кнопка CloudTips для донатов с вашей персональной ссылкой -->
-            <a href="https://pay.cloudtips.ru/p/3e8ec825" target="_blank" class="contact-link tips-btn">
-                <span style="color: var(--heart);">❤️</span> <span data-key="c_tips">Поддержать проект</span>
-            </a>
-            <a href="privacy.html" target="_blank" class="contact-link">
-                <span>📄</span> <span data-key="p_d4">Политика конфиденциальности</span>
-            </a>
-	    <a href="FAQ.html" target="_blank" class="contact-link">
-                <span></span> <span data-key="p_d5">Вопросы-ответы</span>
-            </a>
+          <a
+            href="https://t.me/GS_smerdov"
+            target="_blank"
+            class="contact-link"
+          >
+            <span>
+              <img
+                src="images/telegram.png"
+                alt="Telegram"
+                style="
+                  height: 20px;
+                  width: auto;
+                  vertical-align: middle;
+                  margin-right: 5px;
+                "
+              />
+            </span>
+            <span data-key="c_tg">Telegram-канал</span>
+          </a>
+          <a
+            href="https://pay.cloudtips.ru/p/3e8ec825"
+            target="_blank"
+            class="contact-link tips-btn"
+          >
+            <span style="color: var(--heart)">❤️</span>
+            <span data-key="c_tips">Поддержать проект</span>
+          </a>
+          <a href="privacy.html" target="_blank" class="contact-link">
+            <span>📄</span>
+            <span data-key="p_d4">Политика конфиденциальности</span>
+          </a>
         </div>
-    </section>
-
-    <footer>
+      </section>
+      <footer>
         <p>© 2026 G. Smerdov. All rights reserved.</p>
-        <p style="font-size: 10px;" data-key="f_law">Используя сайт, вы соглашаетесь на обработку персональных данных.</p>
-    </footer>
-</div>
-
-<!-- Кнопка «Наверх» -->
-<button id="to-top-btn" class="c-btn" style="position: fixed; bottom: 20px; right: 20px; display: none; z-index: 99; font-size: 18px;" onclick="scrollToTop()">↑</button>
-
-<script>
-    const dict = { 
-        ru: { 
-            title: "GS | Мои проекты",
-            w_b: "Перейти",
-            p_h: "Мои проекты",
-			p_d0: "Лёгкий анализ HTTP-трафика.",
-            p_d1: "Анализ HTTP-трафика и API.",
-            p_d2: "Анализ HTTP-трафика.",
-            p_d3: "Новости в ТГК",
-            p_d4: "Политика конфиденциальности",
-	    	p_d5: "Вопросы-ответы",    
-            p_dev: "Мощный инструмент анализа HTTP-трафика для ПК",
-            n_h: "Новости", 
-            n_m: "Смотреть все новости",
-            c_h: "Контакты и поддержка",
-            f_law: "Используя сайт, вы соглашаетесь на обработку персональных данных.",
-            c_tg: "Telegram-канал",
-            c_tips: "Поддержать проект",
-            t_copy: "Ссылка скопирована!",
-            
-            n_t1: "Обновление GS.HTTP v1.0.3",
-            n_d1: `<h4>Что нового:</h4>
-                <ul>
-                    <li>— <strong>Версия:</strong> 1.0.3</li>
-                    <li>— <strong>Оптимизация веса:</strong> с 65 МБ до более 10 МБ.</li>
-                    <li>— Приложение полностью перенесено на движок <b>gson</b>.</li>
-                    <li>— Добавлен выбор HTTP-методов: GET, POST, HEAD, PUT.</li>
-                    <li>— Новый инструмент: живой поиск и фильтрация по Заголовкам, Куки и JSON-телу ответа.</li>
-                    <li>— Добавлена кнопка плавного переключения Тёмной/Светлой темы.</li>
-                    <li>— Появилась кнопка «Открыть в браузере» для успешных сканов.</li>
-                    <li>— В раздел инфо улучшена кнопка поддержки и кнопка сайта разработчика.</li>
-                    <li>— Обновлен дизайн иконки приложения (GS).</li>
-                </ul>`,
-            n_t2: "Обновление GS.HTTP.Lite v1.0.8",
-            n_d2: `<h4>Что нового:</h4>
-                <ul>
-                    <li>— <strong>Версия:</strong> 1.0.8</li>
-                    <li>— <strong>Изменения в интерфейсе главного меню приложения.</strong></li>
-                    <li>— Управление данными: вся информация о приложении и его параметры теперь объединены в разделе <b>Настройки</b>.</li>
-                    <li>— Автоматический переход (Автодирект): в настройки добавлена функция, которая при поиске автоматически устанавливает безопасное соединение по протоколу https://.</li>
-                    <li>— Смена темы: добавлена кнопка переключения темы оформления, которая синхронизируется с системными настройками устройства.</li>
-                    <li>— Очистка истории ввода: встроена кнопка быстрого удаления истории. Например, после проверки сайта пользователь может зайти в настройки и очистить историю в один клик, что избавляет от необходимости вручную стирать данные в поисковой строке.</li>
-					<li>— Оптимизация пространства: кнопка «Приступить» перенесена в нижнюю часть экрана. Это решение позволило разгрузить интерфейс и сделать дизайн приложения более минималистичным и аккуратным.</li>
-					<li>— <strong>Изменение интерфейса сканера в приложении.</strong></li>
-					<li>— Добавлен современный: минималистичный дизайн главного экрана с быстрыми вкладками для переключения HTTP-методов (GET, POST, HEAD, PUT).</li>
-					<li>— Раздельные экраны настроек: глобальные настройки приложения теперь открываются из главного меню, а для экрана сканирования создана независимая кастомная шторка параметров.</li>
-					<li>— Новые параметры сети и безопасности: добавлены конфигурации таймаута запросов (5, 10, 15 секунд), переключатель автоматического следования редиректам (3xx) и тумблер строгой проверки SSL-сертификатов.</li>
-					<li>— Интеграция истории: реализована полноценная система логирования прошлых проверок с возможностью быстрой очистки истории ввода и сохранённых URL.</li>
-					<li>— Оптимизация UI: исправлена читаемость элементов интерфейса в светлой теме оформления; шторки теперь поддерживают плавное развёртывание на весь экран при свайпе вверх.</li>
-                </ul>`
-        }, 
-        en: { 
-            title: "GS | My Projects",
-            w_b: "Enter",
-            p_h: "My Projects", 
-			p_d0: "Lightweight HTTP traffic analysis.",
-            p_d1: "HTTP traffic and API analysis.",
-            p_d2: "HTTP traffic analysis.",
-            p_d3: "News in Telegram",
-            p_d4: "Privacy Policy",
-	    	p_d5: "Question-answer",
-            p_dev: "Powerful HTTP Traffic Analyzer for PC",
-            n_h: "News", 
-            n_m: "View all news",
-            c_h: "Contact & Support",
-            f_law: "By using this site, you agree to the processing of personal data.",
-            c_tg: "Telegram Channel",
-            c_tips: "Support Project",
-            t_copy: "Link copied!",
-            
-            n_t1: "GS.HTTP Update v1.0.3",
-            n_d1: `<h4>What's new:</h4>
-                <ul>
-                    <li>— <strong>Version:</strong> 1.0.3</li>
-                    <li>— <strong>Size optimization:</strong> from 65 MB to just over 100 MB.</li>
-                    <li>— The app is completely migrated to the <b>gson</b> engine.</li>
-                    <li>— Added selection of HTTP methods: GET, POST, HEAD, PUT.</li>
-                    <li>— New tool: live search and filtering by Headers, Cookies, and JSON response body.</li>
-                    <li>— Added a button for smooth Dark/Light theme switching.</li>
-                    <li>— Added an "Open in Browser" button for successful scans.</li>
-                    <li>— Improved support button and developer website button in the info section.</li>
-                    <li>— Updated app icon design (GS).</li>
-                </ul>`,
-            n_t2: "GS.HTTP.Lite Update v1.0.8",
-            n_d2: `<h4>What's new:</h4>
-                <ul>
-                    <li>— <strong>Version:</strong> 1.0.8</li>
-                    <li>— <strong>App Main Menu Interface Changes.</strong></li>
-                    <li>— Data Management: all app information and its parameters are now consolidated under the <b>Settings</b> section.</li>
-                    <li>— Auto-Direct: A new feature has been added to Settings that automatically establishes a secure connection via the HTTPS protocol during searches.</li>
-                    <li>— Theme Switching: A theme toggle button has been added, which synchronizes with the device's system settings.</li>
-                    <li>— Clear Input History: A quick-delete button for history is now built-in. For example, after checking a website, a user can go to Settings and clear their history with a single click, eliminating the need to manually erase data in the search bar.</li>
-					<li>— Space Optimization: The <b>Get Started</b> button has been moved to the bottom of the screen. This solution decluttered the interface and made the app design more minimalist and neat.</li>
-					<li>— <strong>App Scanner Interface Changes.</strong></li>
-					<li>— Modern UI: A minimalist home screen design has been added, featuring quick tabs for switching between HTTP methods (GET, POST, HEAD, PUT).</li>
-					<li>— Separate Settings Screens: Global app settings now open from the main menu, while a separate custom options sheet (bottom sheet) has been created for the scanning screen.</li>
-					<li>— New Network & Security Parameters: Added request timeout configurations (5, 10, 15 seconds), an auto-follow redirects (3xx) toggle, and a strict SSL certificate validation switch.</li>
-					<li>— History Integration: A full-fledged logging system for past checks has been implemented, with the ability to quickly clear input history and saved URLs.</li>
-					<li>— UI Optimization: Fixed the readability of interface elements in the light theme. Bottom sheets now support smooth full-screen expansion when swiping up.</li>
-                </ul>`
-        } 
-    };
-
-    let lng = localStorage.getItem('lng') || 'ru';
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-    
-    if (isDark) {
-        document.getElementById('body-tag').classList.remove('light');
-        document.getElementById('tBtn').innerText = '🌙';
-    } else {
-        document.getElementById('body-tag').classList.add('light');
-        document.getElementById('tBtn').innerText = '☀️';
-    }
-
-    apply();
-
-    if (sessionStorage.getItem('welcome_seen')) {
-        document.getElementById('welcome').style.display = 'none';
-        initScrollReveal();
-    }
-
-    function toggleL() {
-        lng = lng === 'ru' ? 'en' : 'ru';
-        localStorage.setItem('lng', lng);
-        apply();
-    }
-
-    function toggleT() {
-        const body = document.getElementById('body-tag');
-        const tBtn = document.getElementById('tBtn');
-        
-        if (body.classList.contains('light')) {
-            body.classList.remove('light');
-            tBtn.innerText = '🌙';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            body.classList.add('light');
-            tBtn.innerText = '☀️';
-            localStorage.setItem('theme', 'light');
-        }
-    }
-
-    function closeW() {
-        const welcome = document.getElementById('welcome');
-        welcome.style.opacity = '0';
-        setTimeout(() => {
-            welcome.style.display = 'none';
-            initScrollReveal();
-        }, 500);
-        sessionStorage.setItem('welcome_seen', 'true');
-    }
-
-
-
-function apply() {
-    // 1. Установка языка и базовых текстов страницы
-    document.documentElement.setAttribute('lang', lng);
-    
-    const siteTitle = document.getElementById('site-title');
-    if (siteTitle && dict[lng] && dict[lng].title) {
-        siteTitle.innerText = dict[lng].title;
-    }
-
-    // 2. Автоматический перевод статичных элементов по data-key
-    document.querySelectorAll('[data-key]').forEach(el => {
-        const key = el.getAttribute('data-key');
-        if (!key || !dict[lng] || !dict[lng][key]) return;
-
-        // Если это текстовое содержимое новости, чистим ручные дефисы "<li>— "
-        if (key === 'n_d1' || key === 'n_d2') {
-            el.innerHTML = dict[lng][key].replace(/<li>\s*—\s*/g, '<li>');
-        } else {
-            // Для всех обычных кнопок и статичного текста
-            el.innerText = dict[lng][key];
-        }
-    });
-
-    // 3. Поиск контейнера новостей
-    const container = document.getElementById('news-container');
-    if (!container) return; // Защита: если контейнера нет на странице, скрипт не упадет
-
-    // Массив с ключами ваших новостей из словаря (dict)
-    const newsKeys = [
-        { titleKey: 'n_t1', descKey: 'n_d1', date: '21.05.2026', id: 'news-103' },
-        { titleKey: 'n_t2', descKey: 'n_d2', date: '09.06.2026', id: 'news-lite106' }
-    ];
-
-    const existingItems = container.querySelectorAll('.news-card');
-
-    if (existingItems.length === newsKeys.length) {
-        existingItems.forEach((li, index) => {
-            const keys = newsKeys[index];
-            let cleanContent = dict[lng][keys.descKey].replace(/<li>\s*—\s*/g, '<li>');
-            
-            li.querySelector('.news-item-title').innerText = dict[lng][keys.titleKey];
-            li.querySelector('.btn-text').innerText = dict[lng].s_more || (lng === 'ru' ? 'Подробнее...' : 'More details...');
-            li.querySelector('.news-content-body').innerHTML = cleanContent;
-        });
-        return; // Завершаем выполнение функции, чтобы не перерисовывать HTML
-    }
-
-    // ==========================================================
-    // ВАРИАНТ Б: ПЕРВИЧНОЕ СОЗДАНИЕ КАРТОЧЕК С НАВЕШИВАНИЕМ КЛИКОВ
-    // ==========================================================
-    container.innerHTML = ''; // Очищаем контейнер перед рендерингом
-
-    newsKeys.forEach(keys => {
-        const li = document.createElement('li');
-        li.className = 'card news-card';
-        li.id = keys.id;
-
-        // Вырезаем жесткие дефисы для правильного CSS-отображения
-        let cleanContent = dict[lng][keys.descKey].replace(/<li>\s*—\s*/g, '<li>');
-        const sMoreText = dict[lng].s_more || (lng === 'ru' ? 'Подробнее...' : 'More details...');
-
-        // Собираем правильную HTML-структуру карточки
-        li.innerHTML = `
-            <div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="news-date">${keys.date}</div>
-                    <button class="share-btn" onclick="copyNewsLink('${keys.id}')" title="Копировать ссылку">🔗</button>
-                </div>
-                <div class="news-item">
-                    <div class="news-item-title">${dict[lng][keys.titleKey]}</div>
-                    <div class="more-details-btn">
-                        <span class="btn-text">${sMoreText}</span>
-                        <span class="arrow">➔</span>
-                    </div>
-                    <div class="news-content-scroll">
-                        <div class="news-content-body">
-                            ${cleanContent}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // НАВЕШИВАЕМ КЛИКАБЕЛЬНОСТЬ НА СВЕЖЕЕОТРЕНДЕРЕННЫЙ БЛОК
-        li.onclick = function(e) {
-            // Если кликнули по кнопке скопировать ссылку или по ссылкам внутри новости — игнорируем
-            if (e.target.closest('.share-btn') || e.target.closest('a')) return;
-
-            const isActive = this.classList.contains('active');
-
-            // Автоматически сворачиваем все остальные новости
-            container.querySelectorAll('.news-card').forEach(otherCard => {
-                if (otherCard !== this) otherCard.classList.remove('active');
-            });
-
-            // Переключаем класс active у текущей карточки (все остальное плавно делает CSS Grid)
-            if (isActive) {
-                this.classList.remove('active');
-            } else {
-                this.classList.add('active');
-            }
-        };
-
-        container.appendChild(li);
-    });
-}
-
-
-
-
-    window.onscroll = function() {
-        manageScrollEffects();
-    };
-
-    function manageScrollEffects() {
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        
-        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
-        document.getElementById("scroll-progress").style.width = scrolled + "%";
-
-        const topBtn = document.getElementById("to-top-btn");
-        if (winScroll > 300) {
-            topBtn.style.display = "flex";
-        } else {
-            topBtn.style.display = "none";
-        }
-    }
-
-    function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Показ всплывающего Toast уведомления
-    function showToast(message) {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerText = message;
-        container.appendChild(toast);
-        
-        setTimeout(() => toast.classList.add('show'), 50);
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 2500);
-    }
-
-    function copyNewsLink(newsId) {
-        const baseUrl = window.location.href.split('#');
-        const fullUrl = baseUrl + '#' + newsId;
-
-        navigator.clipboard.writeText(fullUrl).then(() => {
-            const card = document.getElementById(newsId);
-            const btn = card.querySelector('.share-btn');
-            const originalIcon = btn.innerText;
-            
-            btn.innerText = '✔️';
-            btn.style.opacity = '1';
-            
-            showToast(dict[lng].t_copy);
-            
-            setTimeout(() => {
-                btn.innerText = originalIcon;
-                btn.style.opacity = '';
-            }, 1500);
-        }).catch(err => {
-            console.error('Ошибка копирования: ', err);
-        });
-    }
-
-    // Инициализация анимации появления блоков при прокрутке
-    function initScrollReveal() {
-        const reveals = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        reveals.forEach(el => observer.observe(el));
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        if (sessionStorage.getItem('welcome_seen')) {
-            initScrollReveal();
-        }
-
-        const hash = window.location.hash;
-        if (hash) {
-            const targetNews = document.querySelector(hash);
-            if (targetNews) {
-                const details = targetNews.querySelector('details');
-                if (details) {
-                    details.open = true;
-                    setTimeout(() => {
-                        targetNews.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 500);
-                }
-            }
-        }
-    });
-// ==========================================
-// 1. КОНФИГУРАЦИЯ ЦВЕТОВ ДЛЯ ДВУХ ТЕМ
-// ==========================================
-const canvasThemes = {
-    dark: {
-        particleColor: 'rgba(255, 255, 255, 0.85)',
-        lineColorRGB: '255, 255, 255',
-        lineAlphaModifier: 0.4,
-        mouseAlphaModifier: 0.75
-    },
-    light: {
-        particleColor: 'rgba(50, 50, 60, 0.75)', 
-        lineColorRGB: '50, 50, 60',              
-        lineAlphaModifier: 0.3,
-        mouseAlphaModifier: 0.5
-    }
-};
-
-let currentCanvasColors = canvasThemes.dark;
-
-function syncCanvasTheme() {
-    const body = document.getElementById('body-tag');
-    if (body && body.classList.contains('light')) {
-        currentCanvasColors = canvasThemes.light;
-    } else {
-        currentCanvasColors = canvasThemes.dark;
-    }
-}
-
-// ==========================================
-// 2. АВТОНОМНЫЙ СКРИПТ АНИМАЦИИ (ИСПРАВЛЕННЫЙ)
-// ==========================================
-(function() {
-    let canvas = document.getElementById('bgCanvas');
-    if (!canvas) {
-        canvas = document.createElement('canvas');
-        canvas.id = 'bgCanvas';
-        canvas.style.position = 'fixed';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.width = '100vw';
-        canvas.style.height = '100vh';
-        canvas.style.zIndex = '99999'; 
-        canvas.style.pointerEvents = 'none'; 
-        document.body.appendChild(canvas); 
-    }
-    
-    const ctx = canvas.getContext('2d');
-    
-    const config = {
-        particleCount: 110,      
-        maxDistance: 150,        
-        mouseDistance: 180,      
-        baseSpeed: 1.2           
-    };
-
-    let particles = [];
-    const mouse = { x: null, y: null };
-
-    function updateConfigForDevice() {
-        const width = window.innerWidth;
-        
-        if (width < 480) { 
-            config.particleCount = 35;
-            config.maxDistance = 90;
-            config.mouseDistance = 120;
-        } else if (width < 768) { 
-            config.particleCount = 55;
-            config.maxDistance = 110;
-            config.mouseDistance = 140;
-        } else if (width < 1200) { 
-            config.particleCount = 85;
-            config.maxDistance = 130;
-            config.mouseDistance = 160;
-        } else { 
-            config.particleCount = 110;
-            config.maxDistance = 150;
-            config.mouseDistance = 180;
-        }
-    }
-
-    function init() {
-        particles = [];
-        for (let i = 0; i < config.particleCount; i++) {
-            particles.push(new Particle());
-        }
-    }
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const oldCount = config.particleCount;
-        updateConfigForDevice();
-        if (oldCount !== config.particleCount || particles.length === 0) {
-            init(); 
-        }
-    }
-    
-    window.addEventListener('resize', resizeCanvas);
-
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    window.addEventListener('mouseleave', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    // Исправлено: корректное считывание координат первого касания [0]
-    window.addEventListener('touchmove', (e) => {
-        if (e.touches && e.touches.length > 0) {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-        }
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    class Particle {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * config.baseSpeed;
-            this.vy = (Math.random() - 0.5) * config.baseSpeed;
-            this.radius = Math.random() * 1.2 + 1.2; 
-        }
-
-        update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-        }
-
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = currentCanvasColors.particleColor; 
-            ctx.fill();
-        }
-    }
-
-    function animate() {
-        syncCanvasTheme();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                let dx = particles[i].x - particles[j].x;
-                let dy = particles[i].y - particles[j].y;
-                let dist = Math.hypot(dx, dy);
-
-                if (dist < config.maxDistance) {
-                    let alpha = (1 - dist / config.maxDistance) * currentCanvasColors.lineAlphaModifier;
-                    
-                    if (mouse.x !== null && mouse.y !== null) {
-                        let mDist1 = Math.hypot(particles[i].x - mouse.x, particles[i].y - mouse.y);
-                        if (mDist1 < config.mouseDistance) alpha *= 1.5;
-                    }
-
-                    ctx.strokeStyle = `rgba(${currentCanvasColors.lineColorRGB}, ${alpha})`;
-                    ctx.lineWidth = 0.6; 
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.stroke();
-                }
-            }
-
-            if (mouse.x !== null && mouse.y !== null) {
-                let mDx = particles[i].x - mouse.x;
-                let mDy = particles[i].y - mouse.y;
-                let mDist = Math.hypot(mDx, mDy);
-
-                if (mDist < config.mouseDistance) {
-                    let mAlpha = (1 - mDist / config.mouseDistance) * currentCanvasColors.mouseAlphaModifier;
-                    ctx.strokeStyle = `rgba(${currentCanvasColors.lineColorRGB}, ${mAlpha})`;
-                    ctx.lineWidth = 0.8; 
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(mouse.x, mouse.y);
-                    ctx.stroke();
-                }
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    // Принудительный вызов функций в правильном порядке
-    updateConfigForDevice();
-    resizeCanvas(); // Внутри вызовется init()
-    animate();
-})();
-
-const nextBtn = document.getElementById('nextBtn');
-const prevBtn = document.getElementById('prevBtn');
-const descBlock = document.getElementById('sliderDesc');
-
-let currentIdx = 0; 
-const totalSlides = 6;
-
-const descriptions = [
-    "GS.HTTP.Lite: Новое минималистичное главное меню приложения.",
-    "GS.HTTP.Lite: Удобное новое выпадающее меню, в котором минималистично и аккуратно расположены все дополнительные функции приложения.",
-    "GS.HTTP.Lite: Теперь в приложении доступны настройки и оформлены в красивой выпадающей шторки",
-    "GS.HTTP.Lite: Новый дизайн сканера в приложении.",
-    "GS.HTTP.Lite: Обновлённый полномасштабный раздел настроек",
-    "GS.HTTP.Lite: Обновлённый раздел очистки истории"
-];
-
-function moveSlider() {
-    // 1. Сбрасываем и расставляем активные классы для правильного масштаба/прозрачности
-    for (let i = 0; i < totalSlides; i++) {
-        document.getElementById('slide' + i).classList.remove('active');
-        document.getElementById('dot' + i).classList.remove('active');
-    }
-
-    const activeSlide = document.getElementById('slide' + currentIdx);
-    activeSlide.classList.add('active');
-    document.getElementById('dot' + currentIdx).classList.add('active');
-    
-    // 2. Команда браузеру: найти активный слайд и отцентровать его строго посередине
-    activeSlide.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-    });
-
-    // 3. Обновляем текст описания
-    descBlock.textContent = descriptions[currentIdx];
-}
-
-nextBtn.addEventListener('click', () => {
-    currentIdx = currentIdx + 1;
-    if (currentIdx >= totalSlides) { currentIdx = 0; }
-    moveSlider();
-});
-
-prevBtn.addEventListener('click', () => {
-    currentIdx = currentIdx - 1;
-    if (currentIdx < 0) { currentIdx = totalSlides - 1; }
-    moveSlider();
-});
-
-window.addEventListener('load', () => {
-    // 1. Сначала просто настраиваем активные классы и текст
-    for (let i = 0; i < totalSlides; i++) {
-        document.getElementById('slide' + i).classList.remove('active');
-        document.getElementById('dot' + i).classList.remove('active');
-    }
-    document.getElementById('slide' + currentIdx).classList.add('active');
-    document.getElementById('dot' + currentIdx).classList.add('active');
-    descBlock.textContent = descriptions[currentIdx];
-
-    // 2. Находим внутренний контейнер прокрутки слайдера
-    const viewport = document.getElementById('viewport');
-    const activeSlide = document.getElementById('slide' + currentIdx);
-    
-    if (viewport && activeSlide) {
-        // Вычисляем точное положение первого слайда внутри контейнера
-        const offsetLeft = activeSlide.offsetLeft - (viewport.clientWidth / 2) + (activeSlide.clientWidth / 2);
-        // Прокручиваем ТОЛЬКО слайдер, не трогая скролл всей страницы
-        viewport.scrollLeft = offsetLeft;
-    }
-});
-
-
-
-
-</script>
-</body>
+        <p style="font-size: 10px" data-key="f_law">
+          Используя сайт, вы соглашаетесь на обработку персональных данных.
+        </p>
+      </footer>
+    </div>
+    <button
+      id="to-top-btn"
+      class="c-btn"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+        z-index: 99;
+        font-size: 18px;
+      "
+      onclick="scrollToTop()"
+    >
+      ↑
+    </button>
+    <script src="script.js"></script>
+  </body>
 </html>
-
 
 
 
