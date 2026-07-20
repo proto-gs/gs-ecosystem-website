@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GS | Ecosystem</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="lang-button.css" />
+    <link rel="stylesheet" href="id.css" />
+    <link rel="icon" href="images/GS.Ecosystem.png" type="image/png" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-left"></div>
+
+      <ul class="nav-menu">
+        <li>
+          <a href="https://gs-ht.ru" class="nav-link" data-lang-key="nav-main">Главная</a>
+        </li>
+        <li>
+          <a href="documentation.html" class="nav-link active" data-lang-key="nav-protocol">Документация</a>
+        </li>
+        <li>
+          <a href="apps.html" class="nav-link" data-lang-key="nav-apps">Приложения</a>
+        </li>
+      </ul>
+
+      <div class="header-right">
+        <div class="lang-switcher">
+          <span class="lang-button">RU</span>
+          <div class="lang-dropdown">
+            <a href="#" class="lang-item" data-lang="en">English</a>
+            <a href="#" class="lang-item" data-lang="ru">Русский</a>
+          </div>
+        </div>
+      </div>
+      <div class="tl_main_page_container"></div>
+    </header>
+    <div class="formater_cvet">
+        <h1>Документация по приложению: GS.HTTP</h1>
+        <p id="options-document">
+            <a href="#introduction" id="document-options-link">Вводная часть</a><br>
+            <a href="#installation" id="document-options-link">Установка приложения</a><br>
+            <a href="#launching-the-application" id="document-options-link">Запуск приложения</a><br>
+            <a href="#search-by-url" id="document-options-link">Поиск по url</a><br>
+            <a href="#answer" id="document-options-link">Данные ответа сервера</a><br>
+            <a href="#history" id="document-options-link">История поиска</a><br>
+            <a href="#settings" id="document-options-link">Настройки приложения</a><br>
+            <a href="#information" id="document-options-link">Окно информации</a><br>
+            <a href="#common-mistake" id="document-options-link">Частая ошибка</a><br>
+            <a href="#complete" id="document-options-link">Завершение/Связь</a><br>
+        </p>
+    </div>
+    <div class="formater_cvet">
+<h1 id="introduction">Вводная часть</h1>
+<p id="options-document">
+    <strong>GS HTTP</strong> — это легкая и быстрая утилита, созданная специально для веб-разработчиков, системных администраторов и всех, кто работает с API и сетевыми запросами.<br><br>
+    С помощью GS HTTP(далее-приложение) вы сможете:<br>
+    • Мгновенно узнавать HTTP-статус любого сайта (200 OK, 404 Not Found и др.).<br>
+    • Анализировать технические заголовки (Headers) ответов сервера.<br>
+    • Проверять Cookies, установленные веб-ресурсами.<br>
+    Приложение максимально минималистично: в нем нет регистрации и сбора личных данных.<br>
+    Весь необходимый функционал доступен сразу после запуска.<br>
+    Идеальный помощник для оперативной диагностики сайтов прямо с вашего смартфона.<br>
+    Системные требования:<br>
+    Минимальная версия: <strong>Android 7</strong></p>
+<h1 id="installation">Установка приложения</h1>
+<p id="options-document">
+    Скачать приложение можно в двух сторах для android приложений: <a href="https://www.rustore.ru/catalog/app/com.flet.gshttp" target="_blank" id="document-options-link">RuStore</a>, <a href="https://ruplay.market/apps/com.flet.gshttp" target="_blank" id="document-options-link">RuMarket</a></p>
+<h1 id="launching-the-application">Запуск приложения</h1>
+<p id="options-document">
+    После того как вы установили приложение, то вы сразу же можете его запустить, никаких дополнительных настроек и компонентов для его работы не требуются.
+    <img src="Documentation_GS.HTTP/main.png" alt="Главное меню приложения" width="500">
+</p>
+<h1 id="search-by-url">Поиск по url</h1>
+<p id="options-document">
+    Сейчас мы рассмотрим первую работу приложения, как проверить определённый сайт на наличие его доступности и узнать дополнительные подробности.
+    <img src="Documentation_GS.HTTP/scan.png" alt="Меню скана приложения" width="500"><br>
+    Здесь важно правильно уловить концепцию самого приложения.<br>
+    Чтобы провести первую проверку url нужнно сначала ввести его, например вводим главный сайт проекта GS -> <strong>https://gs-ht.ru</strong>.<br>
+    Далее нажимаем на кнопку "Запустить скан" и видим ответ.<br>
+    <img src="Documentation_GS.HTTP/success.png" alt="Успешно" width="500"><br>
+    Введённые нами данные сохраняются в истории поиска, где мы также можем отслеживать всё что мы вводили.<br>
+    История поиска хранится локально на <strong>Android</strong> и не передаются 3-им лицам.<br>
+    А также при успешном ответе можно открыть сайт в браузере, нажав на кнопку "Открыть в браузере" или посмотреть его содержание, нажав на кнопку "Поиск по данным ответа".<br>
+</p>
+<h1 id="answer">Данные ответа сервера</h1>
+<p id="options-document">
+    Как уже и говорилось ранее после успешного запроса, можно посмотреть данные ответа сервера, нажав на кнопку "Поиск по данным ответа".<br>
+    <img src="Documentation_GS.HTTP/view.png" alt="Данные ответы сервера" width="500"><br>
+    В этом окне можно переключатся и смотерть определённый тип данных:<br> 
+    <strong>Body</strong> - Тело сайта<br> 
+    <strong>Headers</strong> - Заголовки сайта.<br> 
+    <strong>Cookies</strong> - Куки сайта.<br>
+    А также можно осуществить поиск по нахождению определённого тега или функции.<br>
+</p> 
+<h1 id="history">История поиска</h1>
+<p id="options-document">
+    <img src="Documentation_GS.HTTP/history.png" alt="История поиска в приложении" width="500"><br>
+    Введённые нами данные сохраняются в истории поиска, где мы также можем отслеживать всё что мы вводили.<br>
+    История поиска хранится локально на компьютере и не передаются 3-им лицам.<br>
+</p>
+<h1 id="settings">Настройки приложения</h1>
+<p id="options-document">
+    <img src="Documentation_GS.HTTP/settings.png" alt="Настроки в приложении" width="500"><br>
+    Здесь находятся настройки всего приложения в которые входят:<br>
+    <strong>Сеть</strong><br>
+    Авто-редирект - перенаправляет по 3xx кодам к безопасному соединению.<br>
+    <strong>Оформление и данные</strong><br>
+    Тема оформления - меняет тему на "тёмная", "светлая", "как в системе".<br>
+    Очистить историю и ввод - очищает последний ввод и историю в приложении.<br> 
+</p>   
+<h1 id="information">Окно информации</h1>
+<p id="options-document">
+    <img src="Documentation_GS.HTTP/information.png" alt="Окно информации в приложении" width="500"><br>
+    В этом окне находится информация о приложении:<br>
+    <strong>Разработчик</strong>: Георгий Смердов<br>
+    <strong>Версия</strong>: 1.0.4<br>
+</p>
+<h1 id="common-mistake">Частая ошибка</h1>
+<p id="options-document">
+    Здесь я хочу подметить всего лишь одну ошибку которая может возникнуть у многих пользователей при использовании приложения.<br>
+    Эта ошибка связана с некоректно введённым url в меню "поиск по url", например таким <strong>https: //gs-ht.ru</strong> или таким <strong>https:/gs-ht.ru</strong>.<br>
+    Казалось бы из-за одного пробела или пропускного слэша такая ошибка.<br>
+    После того как вы нажмёте кнопку "Запустить скан", приложение вылетит это нормально вы его сможете снова запустить.<br>
+    Ошибка происходит из-за того, что пока в приложении нет полноценной обработки ошибок, но вскоре она обязательно появится и будет просто выводить неккоректный формат ввода.<br>
+</p>
+<h1 id="complete">Завершение/Связь</h1>
+<p id="options-document">
+    На этом пока документация подошла к концу, но она будет обновляться при добавлений новых функций.<br>
+    Следить за новостями проекта можно в telegram-канале.<br><br>
+    Связаться можно по почте:<br>
+    georgsmerdov@outlook.com: en<br>
+    smerdovgeorgy@yandex.ru: ru<br><br>
+
+    Написать в боты мессенджеров:<br>
+    MAX чат-бот command: /support<br>
+    Telegram-бот command: /support<br>
+</p>
+</div>
+      <br><br>
+  <p id="copyright-text">&copy 2026 Георгий Смердов (ГС Екосистем). <br>Все права защищены.</p>
+    <script src="script.js"></script>
+  </body>
+</html>
