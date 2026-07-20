@@ -2,7 +2,7 @@ const translations = {
   ru: {
     "nav-main": "Главная",
     "nav-protocol": "Документация",
-    "nav-apps": "Приложения",
+    "nav-apps": "Апп",
     "about-project-gs": "О GS Ecosystem",
     "links": "Полезные ссылки",
     "contact-cooperation": "Связаться / Сотрудничество",
