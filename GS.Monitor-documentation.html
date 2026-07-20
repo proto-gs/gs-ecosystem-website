@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GS | Ecosystem</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="lang-button.css" />
+    <link rel="stylesheet" href="id.css" />
+    <link rel="icon" href="images/GS.Ecosystem.png" type="image/png" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-left"></div>
+
+      <ul class="nav-menu">
+        <li>
+          <a href="https://gs-ht.ru" class="nav-link" data-lang-key="nav-main">Главная</a>
+        </li>
+        <li>
+          <a href="documentation.html" class="nav-link active" data-lang-key="nav-protocol">Документация</a>
+        </li>
+        <li>
+          <a href="apps.html" class="nav-link" data-lang-key="nav-apps">Приложения</a>
+        </li>
+      </ul>
+
+      <div class="header-right">
+        <div class="lang-switcher">
+          <span class="lang-button">RU</span>
+          <div class="lang-dropdown">
+            <a href="#" class="lang-item" data-lang="en">English</a>
+            <a href="#" class="lang-item" data-lang="ru">Русский</a>
+          </div>
+        </div>
+      </div>
+      <div class="tl_main_page_container"></div>
+    </header>
+    <div class="formater_cvet">
+        <h1>Документация по приложению: GS.Monitor</h1>
+        <p id="options-document">
+            <a href="#introduction" id="document-options-link">Вводная часть</a><br>
+            <a href="#installation" id="document-options-link">Установка приложения</a><br>
+            <a href="#launching-the-application" id="document-options-link">Запуск приложения</a><br>
+            <a href="#search-by-url" id="document-options-link">Поиск по url</a><br>
+            <a href="#search-by-matches" id="document-options-link">Поиск по совпадениям</a><br>
+            <a href="#history" id="document-options-link">История поиска</a><br>
+            <a href="#settings" id="document-options-link">Настройки приложения</a><br>
+            <a href="#information" id="document-options-link">Окно Информации</a><br>
+            <a href="#common-mistake" id="document-options-link">Частая ошибка</a><br>
+            <a href="#complete" id="document-options-link">Завершение/Сотрудничество/Связь</a><br>
+        </p>
+    </div>
+    <div class="formater_cvet">
+        <h1 id="introduction">Вводная часть</h1>
+            <p id="options-document"><strong>GS.Monitor</strong> - мощный анализ HTTP-траффика/аналог android приложения <strong>GS.HTTP</strong><br>
+            <strong>GS.Monitor</strong>(далее - приложение) проверяет сайты на наличие их доступности, а также находит их по введённому значению.<br>
+            Системные требования приложения разных типов установок:<br>
+            <strong>Windows</strong>: 7/10/11 !> 150MB<br>
+            <strong>Linux</strong>/<strong>Debian</strong>/<strong>Ubuntu</strong>: 11/12 !> 70MB</p>
+            <h1 id="installation">Установка приложения</h1>
+            <p id="options-document">Скачать приложение можно на <a href="https://github.com/proto-gs/GS.Monitor" target="_blank" id="document-options-link">GitHub</a> в разделе <a href="https://github.com/proto-gs/GS.Monitor/releases/tag/v1.0.2" target="_blank" id="document-options-link">Realeases</a> в репозитории<br><br>
+            <strong>Важно</strong> там будет одна версия для скачиваний , но будет много файлов, чтобы ориентироваться и не запутаться в установке, рекомендую ознакомиться с файлами каждой операционной системы:<br>
+            <strong>.msi</strong> - Windows<br>    
+            <strong>.exe</strong> - Windows<br>
+            <strong>.deb</strong> - Linux/Debian<br>
+            <strong>.zip</strong> - Source code Windows/Portable version<br>
+            <strong>tar.gz</strong> - Source code Linux<br></p>
+    <h1 id="launching-the-application">Запуск приложения</h1>
+        <p id="options-document">После того как вы установили приложение, то вы сразу же можете его запустить, никаких дополнительных настроек и компонентов для его работы не требуются.
+            <img src="Documentation_GS.Monitor/main.png" alt="Главное меню приложения" width="500">
+    <h1 id="search-by-url">Поиск по url</h1> 
+        <p id="options-document">Сейчас мы рассмотрим первую работу приложения, как проверить определённый сайт на наличие его доступности и узнать дополнительные подробности.
+            <img src="Documentation_GS.Monitor/search_url.png" alt="Поиск по url" width="500"><br>
+        Здесь важно правильно уловить концепцию самого приложения.<br>
+        Чтобы провести первую проверку url нужнно сначала ввести его, например вводим главный сайт проекта GS -> <strong>https://gs-ht.ru</strong>.<br>
+        Далее нажимаем на кнопку "Запустить скан" и видим ответ.<br>  
+            <img src="Documentation_GS.Monitor/success.png" alt="Ответ сервера" width="500"><br>
+        Введённые нами данные сохраняются в истории поиска, где мы также можем отслеживать всё что мы вводили.<br>
+        История поиска хранится локально на компьютере и не передаются 3-им лицам.</p>
+    <h1 id="search-by-matches">Поиск по совпадениям</h1>
+        <p id="options-document">В приложении также доступно меню "поиск по совпадениям", главная задача которого включается найти тот или иной сайт по названию любого слова.
+            <img src="Documentation_GS.Monitor/search.png" alt="Поиск по совпадениям" width="500"><br>
+        Здесь довольно проще, чем в панели скана url.<br>
+        Здесь вам предстоит всего лишь ввести название сайта, например тот же сайт только без приписки <strong>https://</strong> и его домена <strong>.ru</strong>.<br>
+        Далее нажимаем "Найти совпадения" и видим ответ.<br>
+            <img src="Documentation_GS.Monitor/success_2.png" alt="Найденные сайты" width="500">
+        </p>
+    <h1 id="history">История поиска</h1>
+        <p id="options-document"> 
+            <img src="Documentation_GS.Monitor/history.png" alt="История поиска" width="500"><br>
+        Введённые нами данные сохраняются в истории поиска, где мы также можем отслеживать всё что мы вводили.<br>
+        История поиска хранится локально на компьютере и не передаются 3-им лицам.</p>
+    <h1 id="settings">Настройки приложения</h1>
+        <p id="options-document">
+            <img src="Documentation_GS.Monitor/settings.png" alt="Настройки приложения" width="500"><br>
+        Здесь находятся настройки всего приложения в которые входят:<br>
+        <strong>Сеть</strong><br>
+        Таймаут запроса - задаёт определённый промежуток времени перед запросом 5/10/15 секунд.<br>
+        Авто-редирект - перенаправляет по 3xx кодам к безопасному соединению.<br>
+        <strong>Безопасность</strong><br>
+        Безопасность SSl, который показывает статус ssl.<br>
+        <strong>Оформление и данные</strong><br>
+        Тема оформления - меняет тему на "тёмная", "светлая", как в системе.<br>
+        Очистить историю и ввод - очищает последний ввод и историю в приложении.<br></p>
+    <h1 id="information">Окно Информации</h1>
+        <p id="options-document">
+            <img src="Documentation_GS.Monitor/information_window.png" alt="Информация о приложении" width="500"><br>
+        В этом окне находится информация о приложении:<br>
+        <strong>Разработчик</strong>: Георгий Смердов<br>
+        <strong>Версия</strong>: 1.0.2<br>
+        <strong>Скачано</strong>: GitHub<br>
+        А также я отметил в окне информации кнопку ссылающую на действующий репозиторий приложения на <a href="https://github.com/proto-gs/GS.Monitor" target="_blank" id="document-options-link">GitHub</a>.<br></p>
+    <h1 id="common-mistake">Частая ошибка</h1>
+        <p id="options-document">
+            <img src="Documentation_GS.Monitor/error.png" alt="Частая ошибка" width="500"><br>
+        Здесь я хочу подметить всего лишь одну ошибку которая может возникнуть у многих пользователей при использовании приложения.<br>
+        Эта ошибка связана с некоректно введённым url в меню "поиск по url", например таким <strong>https: //gs-ht.ru</strong> или таким <strong>https:/gs-ht.ru</strong>.<br>
+        Казалось бы из-за одного пробела или пропускного слэша такая ошибка.<br>
+        После того как вы нажмёте на ок, приложение крашнется это нормально вы его сможете снова запустить.<br>
+        Ошибка происходит из-за того, что пока в приложении нет полноценной обработки ошибок, но вскоре она обязательно появится и будет просто выводить неккоректный формат ввода.<br><br></p>
+    <h1 id="complete">Завершение/Сотрудничество/Связь</h1>
+        <p id="options-document">На этом пока документация подошла к концу, но она будет обновляться при добавлений новых функций.<br>
+        Следить за новостями проекта можно в telegram-канале.<br><br>
+        Если вы хотите помочь проекту: Добавить функцию или поправить что-то, то здесь у вас нет каких-либо ограничений вы можете взять и форкнуть репозиторий на <a href="https://github.com/proto-gs/GS.Monitor" target="_blank" id="document-options-link">GitHub</a> в разделе forks, полностью его перестроив или изменив какие либо значения.<br>
+        Это свободно, потому что там есть лицензия <a href="https://github.com/proto-gs/GS.Monitor?tab=MIT-1-ov-file" target="_blank" id="document-options-link"> MIT License</a>, не имеющих жёсткий ограничений по репозиторию, но сохраняет моё авторство.<br>
+        Если вы уже написали изменения в код или перестроили приложение то вы можете связаься со мной и я оценю ваш код, возможно добавлю ваш форк как независимое дополнение к своей экосистеме.<br><br>
+        Связаться можно по почте:<br> 
+        georgsmerdov@outlook.com: en<br>
+        smerdovgeorgy@yandex.ru: ru<br><br>
+        Написать в боты мессенджеров:<br>
+        MAX чат-бот command: /support<br>
+        Telegram-бот command: /support<br></p>
+    </div>
+      <br><br>
+  <p id="copyright-text">&copy 2026 Георгий Смердов (ГС Екосистем). <br>Все права защищены.</p>
+    <script src="script.js"></script>
+  </body>
+</html>
+
+        
+   
