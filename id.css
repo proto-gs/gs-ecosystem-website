@@ -1,0 +1,85 @@
+#my-link-one {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#my-link-two {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#my-link-three {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#my-link-four {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#my-link-five {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#telegram-channel-link {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#telegram-bot-link {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#max-chat-bot {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+}
+#about-information-project {
+  color: #000000;
+  font-size: 20px;
+  text-decoration: none;
+  border-bottom: 2px solid black; 
+  padding-bottom: 10px;
+  max-width: 800px; 
+  margin: 0 auto;   
+  padding: 20px;
+}
+#copyright-text {
+  text-align: center;
+}
+#about-project {
+    border-bottom: 2px solid black; 
+    padding-bottom: 10px;  
+}
+#favorite-link-personal {
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+}
+#contact-text-cooperation {
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+}
+#privacy-css {
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+}
+#privacy-website-corrent {
+  color: #000000;
+  text-decoration: underline;
+}
+#website-apps-corrent {
+  color: #000000;
+  text-decoration: underline;
+}
+#options-document {
+  border-bottom: 2px solid black;
+  padding-bottom: 10px; 
+}
+#document-options-link {
+  color: #000000;
+  text-decoration: underline;
+}
